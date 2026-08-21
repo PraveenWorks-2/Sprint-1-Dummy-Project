@@ -89,12 +89,12 @@ The implemented APIs were tested using Postman, including:
 # Team 4 Contribution
 
 # Sai Charan
--Login
--JWT Authentication
--Login Validation
--Validation and exception handling related to assigned features
+- Login
+- JWT Authentication
+- Login Validation
+- Validation and exception handling related to assigned features
 
 # Kirubakaran S.
--Password Encryption
--Password Policy
--MFA Framework
+- Password Encryption
+- Password Policy
+- MFA Framework
