@@ -68,6 +68,7 @@ The implemented APIs were tested using Postman, including:
 - OTP reuse validation
 
 ### Architecture
+```text
 
   Client / Postman
          ↓
@@ -84,7 +85,7 @@ The implemented APIs were tested using Postman, including:
   Entity
          ↓
   PostgreSQL
-
+```
 # Team 4 Contribution
 
 # Sai Charan
