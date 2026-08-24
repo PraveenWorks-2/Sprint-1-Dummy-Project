@@ -1,4 +1,4 @@
-package com.oneenterprise.dummyproject.user.importuser.dto;
+package com.oneenterprise.dummyproject.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

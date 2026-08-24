@@ -1,6 +1,7 @@
-package com.oneenterprise.dummyproject.user.importuser.dto;
+package com.oneenterprise.dummyproject.user.dto;
 
 import java.util.List;
+
 import lombok.Data;
 
 @Data

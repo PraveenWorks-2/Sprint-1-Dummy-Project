@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.oneenterprise.dummyproject.user.importuser.dto.BulkUploadResponseDto;
-import com.oneenterprise.dummyproject.user.importuser.dto.BulkUserRequestDto;
-import com.oneenterprise.dummyproject.user.importuser.dto.ImportSummaryDto;
+import com.oneenterprise.dummyproject.user.dto.BulkUploadResponseDto;
+import com.oneenterprise.dummyproject.user.dto.BulkUserRequestDto;
+import com.oneenterprise.dummyproject.user.dto.ImportSummaryDto;
 
 public interface UserImportService {
 

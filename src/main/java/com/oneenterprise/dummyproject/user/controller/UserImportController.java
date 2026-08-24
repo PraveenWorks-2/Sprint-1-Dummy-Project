@@ -1,4 +1,4 @@
-package com.oneenterprise.dummyproject.user.importuser.controller;
+package com.oneenterprise.dummyproject.user.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.oneenterprise.dummyproject.user.importuser.dto.BulkUploadResponseDto;
-import com.oneenterprise.dummyproject.user.importuser.dto.BulkUserRequestDto;
-import com.oneenterprise.dummyproject.user.importuser.dto.ImportSummaryDto;
+import com.oneenterprise.dummyproject.user.dto.BulkUploadResponseDto;
+import com.oneenterprise.dummyproject.user.dto.BulkUserRequestDto;
+import com.oneenterprise.dummyproject.user.dto.ImportSummaryDto;
 import com.oneenterprise.dummyproject.user.importuser.service.UserImportService;
 
 import lombok.RequiredArgsConstructor;

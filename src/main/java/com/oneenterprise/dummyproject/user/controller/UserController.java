@@ -2,7 +2,8 @@ package com.oneenterprise.dummyproject.user.controller;
 
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationRequestDto;
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationResponseDto;
-import com.oneenterprise.dummyproject.user.service.UserService;
+import com.oneenterprise.dummyproject.user.importuser.service.UserService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
