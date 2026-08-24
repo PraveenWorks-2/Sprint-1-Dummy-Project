@@ -1,5 +1,8 @@
 package com.oneenterprise.dummyproject.platform.dashboard.service.impl;
 
+import com.oneenterprise.dummyproject.feature.management.repository.PlatformFeatureRepository;
+import com.oneenterprise.dummyproject.license.management.repository.LicenseRepository;
+import com.oneenterprise.dummyproject.platform.branding.repository.PlatformBrandingRepository;
 import com.oneenterprise.dummyproject.platform.configuration.repository.PlatformConfigRepository;
 import com.oneenterprise.dummyproject.platform.dashboard.dto.DashboardMetricsResponseDto;
 import com.oneenterprise.dummyproject.platform.dashboard.service.DashboardService;
@@ -17,17 +20,36 @@ import java.util.Map;
 public class DashboardServiceImpl implements DashboardService {
 
     private final SuperAdminRepository superAdminRepository;
-    private final PlatformConfigRepository configRepository;
-    private final PlatformSettingsRepository settingsRepository;
-
+    
     @Autowired
-    public DashboardServiceImpl(SuperAdminRepository superAdminRepository,
-                                PlatformConfigRepository configRepository,
-                                PlatformSettingsRepository settingsRepository) {
-        this.superAdminRepository = superAdminRepository;
-        this.configRepository = configRepository;
-        this.settingsRepository = settingsRepository;
-    }
+	public DashboardServiceImpl(SuperAdminRepository superAdminRepository, PlatformConfigRepository configRepository,
+			PlatformSettingsRepository settingsRepository, PlatformBrandingRepository platformbrandingRepository,
+			PlatformFeatureRepository platformfeatureRepository, LicenseRepository licenseRepository) {
+		super();
+		this.superAdminRepository = superAdminRepository;
+		this.configRepository = configRepository;
+		this.settingsRepository = settingsRepository;
+		this.platformbrandingRepository = platformbrandingRepository;
+		this.platformfeatureRepository = platformfeatureRepository;
+		this.licenseRepository = licenseRepository;
+	}
+
+
+	private final PlatformConfigRepository configRepository;
+    private final PlatformSettingsRepository settingsRepository;
+    private final PlatformBrandingRepository platformbrandingRepository;
+    private final PlatformFeatureRepository platformfeatureRepository;
+    private final LicenseRepository licenseRepository;
+    
+
+//    @Autowired
+//    public DashboardServiceImpl(SuperAdminRepository superAdminRepository,
+//                                PlatformConfigRepository configRepository,
+//                                PlatformSettingsRepository settingsRepository) {
+//        this.superAdminRepository = superAdminRepository;
+//        this.configRepository = configRepository;
+//        this.settingsRepository = settingsRepository;
+//    }
 
     @Override
     public DashboardMetricsResponseDto getDashboardMetrics() {
@@ -35,6 +57,9 @@ public class DashboardServiceImpl implements DashboardService {
         long activeAdmins = superAdminRepository.countByIsActiveTrue();
         long totalConfigs = configRepository.count();
         long totalSettings = settingsRepository.count();
+        long totalBrands= platformbrandingRepository.count();
+        long totalFeatures= platformfeatureRepository.count();
+        long totalLicenses= licenseRepository.count();
 
         
         Runtime runtime = Runtime.getRuntime();
@@ -54,6 +79,9 @@ public class DashboardServiceImpl implements DashboardService {
                 activeAdmins,
                 totalConfigs,
                 totalSettings,
+                totalBrands,
+                totalFeatures,
+                totalLicenses,
                 "HEALTHY_ONLINE",
                 System.getProperty("java.version"),
                 LocalDateTime.now(),

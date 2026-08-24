@@ -3,6 +3,7 @@ package com.oneenterprise.dummyproject.authentication.config;
 import com.oneenterprise.dummyproject.authentication.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +32,10 @@ public class SecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/platform/**").permitAll()
+                .requestMatchers("/api/branding/**").permitAll()
+                .requestMatchers("/api/features/**").permitAll()
+                .requestMatchers("/api/licenses/**").permitAll()
+                .requestMatchers("/api/health/**").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

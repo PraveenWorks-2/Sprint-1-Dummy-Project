@@ -18,7 +18,11 @@ public class SuperAdminController {
 
     private final SuperAdminService superAdminService;
 
-    @PostMapping
+	public SuperAdminController(SuperAdminService superAdminService) {
+		this.superAdminService = superAdminService;
+	}
+
+	@PostMapping
     public ResponseEntity<ApiResponse<SuperAdminResponseDto>> createSuperAdmin(@RequestBody SuperAdminRequestDto request) {
         SuperAdminResponseDto response = superAdminService.createSuperAdmin(request);
         return new ResponseEntity<>(ApiResponse.success("Super Admin created successfully", response), HttpStatus.CREATED);
