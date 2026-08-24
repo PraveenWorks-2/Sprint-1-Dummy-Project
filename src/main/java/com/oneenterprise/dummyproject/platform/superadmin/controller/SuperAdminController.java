@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/platform/superadmins")
-@RequiredArgsConstructor
 public class SuperAdminController {
 
     private final SuperAdminService superAdminService;

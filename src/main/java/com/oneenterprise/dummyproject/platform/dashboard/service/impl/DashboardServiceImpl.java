@@ -1,7 +1,7 @@
 package com.oneenterprise.dummyproject.platform.dashboard.service.impl;
 
-import com.oneenterprise.dummyproject.feature.management.repository.PlatformFeatureRepository;
-import com.oneenterprise.dummyproject.license.management.repository.LicenseRepository;
+import com.oneenterprise.dummyproject.platform.featuremanagement.repository.PlatformFeatureRepository;
+import com.oneenterprise.dummyproject.platform.license.repository.LicenseRepository;
 import com.oneenterprise.dummyproject.platform.branding.repository.PlatformBrandingRepository;
 import com.oneenterprise.dummyproject.platform.configuration.repository.PlatformConfigRepository;
 import com.oneenterprise.dummyproject.platform.dashboard.dto.DashboardMetricsResponseDto;

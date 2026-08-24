@@ -5,9 +5,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.oneenterprise.dummyproject.platfjorm.branding.service.PlatformBrandingService;
 import com.oneenterprise.dummyproject.platform.branding.dto.PlatformBrandingRequest;
 import com.oneenterprise.dummyproject.platform.branding.dto.PlatformBrandingResponse;
+import com.oneenterprise.dummyproject.platform.branding.service.PlatformBrandingService;
 
 import java.util.List;
 
