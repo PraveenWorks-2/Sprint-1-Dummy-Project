@@ -1,0 +1,286 @@
+{
+  "info": {
+    "name": "Organization Management - Team 2 - Mohan",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "locationId",
+      "value": "1"
+    },
+    {
+      "key": "branchId",
+      "value": "1"
+    },
+    {
+      "key": "businessUnitId",
+      "value": "1"
+    },
+    {
+      "key": "departmentId",
+      "value": "1"
+    },
+    {
+      "key": "companyId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Locations",
+      "item": [
+        {
+          "name": "Create Location",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"locationCode\": \"HYD\", \"locationName\": \"Hyderabad Office\", \"addressLine1\": \"Hitech City\", \"addressLine2\": \"Madhapur\", \"city\": \"Hyderabad\", \"state\": \"Telangana\", \"country\": \"India\", \"postalCode\": \"500081\"}"
+            },
+            "url": "{{baseUrl}}/api/locations"
+          }
+        },
+        {
+          "name": "Get All Locations",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/locations"
+          }
+        },
+        {
+          "name": "Get Location",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/locations/{{locationId}}"
+          }
+        },
+        {
+          "name": "Update Location",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"locationCode\": \"HYD\", \"locationName\": \"Hyderabad Corporate Office\", \"addressLine1\": \"Hitech City\", \"addressLine2\": \"Madhapur\", \"city\": \"Hyderabad\", \"state\": \"Telangana\", \"country\": \"India\", \"postalCode\": \"500081\"}"
+            },
+            "url": "{{baseUrl}}/api/locations/{{locationId}}"
+          }
+        },
+        {
+          "name": "Update Location Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\":\"INACTIVE\"}"
+            },
+            "url": "{{baseUrl}}/api/locations/{{locationId}}/status"
+          }
+        },
+        {
+          "name": "Delete Location",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/locations/{{locationId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Branches",
+      "item": [
+        {
+          "name": "Create Branch",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"branchCode\":\"HYD-BR\",\"branchName\":\"Hyderabad Branch\",\"description\":\"Main Hyderabad branch\",\"locationId\":{{locationId}}}"
+            },
+            "url": "{{baseUrl}}/api/branches"
+          }
+        },
+        {
+          "name": "Get All Branches",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/branches"
+          }
+        },
+        {
+          "name": "Get Branch",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/branches/{{branchId}}"
+          }
+        },
+        {
+          "name": "Get Branches By Location",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/branches/location/{{locationId}}"
+          }
+        },
+        {
+          "name": "Update Branch",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"branchCode\":\"HYD-BR\",\"branchName\":\"Hyderabad Main Branch\",\"description\":\"Updated branch\",\"locationId\":{{locationId}}}"
+            },
+            "url": "{{baseUrl}}/api/branches/{{branchId}}"
+          }
+        },
+        {
+          "name": "Update Branch Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\":\"INACTIVE\"}"
+            },
+            "url": "{{baseUrl}}/api/branches/{{branchId}}/status"
+          }
+        },
+        {
+          "name": "Delete Branch",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/branches/{{branchId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "item": [
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"departmentCode\":\"ENG\",\"departmentName\":\"Engineering\",\"description\":\"Engineering department\",\"businessUnitId\":{{businessUnitId}},\"branchId\":{{branchId}}}"
+            },
+            "url": "{{baseUrl}}/api/departments"
+          }
+        },
+        {
+          "name": "Get All Departments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/departments"
+          }
+        },
+        {
+          "name": "Get Department",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/departments/{{departmentId}}"
+          }
+        },
+        {
+          "name": "Get By Business Unit",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/departments/business-unit/{{businessUnitId}}"
+          }
+        },
+        {
+          "name": "Get By Branch",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/departments/branch/{{branchId}}"
+          }
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"departmentCode\":\"ENG\",\"departmentName\":\"Engineering and Technology\",\"description\":\"Updated department\",\"businessUnitId\":{{businessUnitId}},\"branchId\":{{branchId}}}"
+            },
+            "url": "{{baseUrl}}/api/departments/{{departmentId}}"
+          }
+        },
+        {
+          "name": "Update Department Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\":\"INACTIVE\"}"
+            },
+            "url": "{{baseUrl}}/api/departments/{{departmentId}}/status"
+          }
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/departments/{{departmentId}}"
+          }
+        }
+      ]
+    }
+  ]
+}
