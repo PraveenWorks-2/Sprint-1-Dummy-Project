@@ -1,4 +1,4 @@
-package com.oneenterprise.dummyproject.user.importuser.service;
+package com.oneenterprise.dummyproject.user.service;
 
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationRequestDto;
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationResponseDto;

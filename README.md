@@ -1,105 +1,175 @@
- Sprint-1-Dummy-Project
+# **Sprint-1 Dummy Project**
 
-## Sprint 1 - Dummy Project | Team 3
+## Overview
 
----
+Dummy Project is a Spring Boot application for managing users.
 
-## 1. Project Overview
+### Technologies
 
-Sprint-1-Dummy-Project is a Spring Boot based backend application developed as part of Sprint 1.
+Java
 
-The application provides REST APIs for handling application functionality and user-related operations. It follows a layered architecture using Spring Boot, Spring Data JPA, Hibernate, and MySQL.
+Spring Boot
 
-The project is designed using a modular approach so that different team members can work on different functionalities while maintaining a common application and database.
+Spring Data JPA
 
----
+Hibernate
 
-# 2. Project Objective
+PostgreSQL
 
-The primary objective of this project is to develop a backend application using enterprise-level development practices.
+Lombok
 
-The application provides:
+Maven
 
-- RESTful APIs
-- Database integration
-- Business logic through service classes
-- Persistence using Spring Data JPA
-- MySQL database support
-- JSON-based API communication
-- CSV-based user import
-- Bulk user upload
-- API testing using Postman
-- Git and GitHub based source-code management
+Postman
 
----
+### User Module
 
-# 3. Module Implemented
+The User module provides the following features:
 
-## User Import Module
+User registration
 
-The User Import module is responsible for adding multiple users to the application.
+User activation
 
-The module supports two methods of user import:
+User deactivation
 
-1. Bulk User Upload using JSON
-2. User Import using CSV
+Bulk user upload
 
-### Responsibilities
+CSV user import
 
-The module handles:
+Duplicate email validation
 
-- Receiving bulk user data
-- Processing user information
-- Validating required user fields
-- Checking existing users where applicable
-- Saving users into the database
-- Processing CSV files
-- Generating import/upload responses
-- Providing REST APIs for client applications
+### API Endpoints
 
----
+#### Register User
 
-# 4. Technology Stack
+#### POST
 
-| Technology | Details |
-|---|---|
-| Programming Language | Java 21 |
-| Framework | Spring Boot 4.0.8 |
-| ORM | Hibernate |
-| Persistence | Spring Data JPA |
-| Database | MySQL 8.0.x |
-| Database Driver | MySQL Connector/J |
-| Build Tool | Maven |
-| API Testing | Postman |
-| IDE | Eclipse / IntelliJ / STS |
-| Version Control | Git |
-| Repository | GitHub |
-| Code Generation | Lombok |
-| Server | Embedded Apache Tomcat |
+/user/register
 
----
+Example request:
 
-# 5. System Architecture
+{
+"firstName": "Aadvik",
+"lastName": "Karthikeyan",
+"email": "aadvik@gmail.com",
+"phone": "9442267066",
+"password": "Aadvik@15"
+}
 
-The application follows a layered architecture.
+### Bulk Upload Users
 
-```text
-                   Client
-                     |
-                     |
-                  REST API
-                     |
-                     ↓
-              Controller Layer
-                     |
-                     ↓
-               Service Layer
-                     |
-                     ↓
-             Repository Layer
-                     |
-                     ↓
-                Entity Layer
-                     |
-                     ↓
-               MySQL Database
+POST
+
+#### /user/bulk-upload
+
+Request body:
+
+[
+{
+"firstName": "Anu",
+"lastName": "Kumar",
+"email": "anu.kumar@test.com",
+"phone": "9876500011"
+},
+{
+"firstName": "Vijay",
+"lastName": "Raj",
+"email": "vijay.raj@test.com",
+"phone": "9876500012"
+}
+]
+
+#### Import Users from CSV
+
+POST
+
+/user/import
+
+Use multipart/form-data with the key:
+
+file
+
+CSV format:
+
+firstName,lastName,email,phone
+Arjun,Kumar,arjun.kumar@test.com,9876543210
+Priya,Raj,priya.raj@test.com,9876543211
+
+## Project Structure
+
+src/main/java/com/oneenterprise/dummyproject
+│
+├── user
+│   ├── controller
+│   ├── dto
+│   ├── entity
+│   ├── enums
+│   ├── mapper
+│   ├── repository
+│   └── service
+│       └── impl
+│
+└── DummyprojectApplication.java
+
+## Database
+
+The application uses PostgreSQL for storing user information.
+
+Configure the database connection in:
+
+src/main/resources/application.properties
+
+##### Example:
+
+spring.datasource.url=jdbc:postgresql://localhost:5433/dummyproject_team3
+spring.datasource.username=postgres
+spring.datasource.password=root
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+## Running the Project
+
+Start PostgreSQL.
+
+Create the required database.
+
+Update the database credentials in application.properties.
+
+Run the Spring Boot application.
+
+Test the APIs using Postman.
+
+Default application URL:
+
+http://localhost:8080
+
+## Testing
+
+The APIs can be tested using Postman.
+
+For CSV import, use:
+
+Body → form-data → file
+
+and select the CSV file.
+
+| Method | Endpoint                 | Purpose       |
+| ------ | ------------------------ | ------------- |
+| POST   | `/user/register`         | Register user |
+| GET    | `/user/{id}`             | Get user      |
+| GET    | `/user/activate/{id}`    | Activate      |
+| GET    | `/user/de-activate/{id}` | Deactivate    |
+| POST   | `/user/bulk-upload`      | Bulk users    |
+| POST   | `/user/import`           | CSV import    |
+
+
+## Build
+
+Run:
+
+mvn clean install
+
+To run the application:
+
+mvn spring-boot:run

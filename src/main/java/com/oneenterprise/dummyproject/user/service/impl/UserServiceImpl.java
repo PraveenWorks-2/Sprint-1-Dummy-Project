@@ -1,4 +1,4 @@
-package com.oneenterprise.dummyproject.user.importuser.service.impl;
+package com.oneenterprise.dummyproject.user.service.impl;
 
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationRequestDto;
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationResponseDto;
@@ -6,7 +6,7 @@ import com.oneenterprise.dummyproject.user.entity.User;
 import com.oneenterprise.dummyproject.user.enums.UserStatus;
 import com.oneenterprise.dummyproject.user.exception.UserAlreadyExistsException;
 import com.oneenterprise.dummyproject.user.exception.UserNotFoundException;
-import com.oneenterprise.dummyproject.user.importuser.service.UserService;
+import com.oneenterprise.dummyproject.user.service.UserService;
 import com.oneenterprise.dummyproject.user.mapper.UserMapper;
 import com.oneenterprise.dummyproject.user.repository.UserRepository;
 

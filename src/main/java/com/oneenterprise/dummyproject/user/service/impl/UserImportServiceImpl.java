@@ -1,4 +1,4 @@
-package com.oneenterprise.dummyproject.user.importuser.service.impl;
+package com.oneenterprise.dummyproject.user.service.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import com.oneenterprise.dummyproject.user.dto.ImportErrorDto;
 import com.oneenterprise.dummyproject.user.dto.ImportSummaryDto;
 import com.oneenterprise.dummyproject.user.entity.User;
 import com.oneenterprise.dummyproject.user.enums.UserStatus;
-import com.oneenterprise.dummyproject.user.importuser.service.UserImportService;
+import com.oneenterprise.dummyproject.user.service.UserImportService;
 import com.oneenterprise.dummyproject.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

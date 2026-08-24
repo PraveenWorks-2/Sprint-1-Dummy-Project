@@ -1,4 +1,4 @@
-package com.oneenterprise.dummyproject.user.importuser.service;
+package com.oneenterprise.dummyproject.user.service;
 
 import java.io.IOException;
 import java.util.List;
