@@ -1,0 +1,5 @@
+# Created at 2026-08-27T11:49:47.868
+Boot Manifest-JAR contains absolute paths in classpath 'E:\downloadsE\profile\Stackly_office\projects\Sprint-1-Dummy-Project\security-session-service\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
