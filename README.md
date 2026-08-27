@@ -15,7 +15,7 @@ A Spring Boot REST API project for managing platform administration features.
 
 ## Modules
 
-### Mohan
+### Manoj
 - Super Admin
 - Global Dashboard
 - Platform Configuration
