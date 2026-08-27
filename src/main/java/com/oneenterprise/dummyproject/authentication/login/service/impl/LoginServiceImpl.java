@@ -3,7 +3,7 @@ package com.oneenterprise.dummyproject.authentication.login.service.impl;
 import com.oneenterprise.dummyproject.authentication.login.dto.request.LoginRequest;
 import com.oneenterprise.dummyproject.authentication.login.dto.response.LoginResponse;
 import com.oneenterprise.dummyproject.authentication.login.entity.User;
-import com.oneenterprise.dummyproject.authentication.login.repository.UserRepository;
+import com.oneenterprise.dummyproject.authentication.login.repository.AuthenticationUserRepository;
 import com.oneenterprise.dummyproject.authentication.login.service.LoginService;
 import com.oneenterprise.dummyproject.authentication.loginvalidation.exception.AccountDisabledException;
 import com.oneenterprise.dummyproject.authentication.loginvalidation.exception.AccountLockedException;
@@ -16,11 +16,11 @@ import com.oneenterprise.dummyproject.authentication.jwt.JwtUtil;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    private final UserRepository userRepository;
+    private final AuthenticationUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public LoginServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+public LoginServiceImpl(AuthenticationUserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;

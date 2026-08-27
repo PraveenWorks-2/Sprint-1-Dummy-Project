@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "users")
+@Entity(name = "AuthenticationUser")
+@Table(name = "authentication_users")
 public class User {
 
     @Id
