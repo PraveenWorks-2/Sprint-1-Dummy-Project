@@ -1,0 +1,27 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: security-session-postgres
+    environment:
+      POSTGRES_DB: security_session_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - security_session_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: security-session-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - security_session_redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  security_session_postgres_data:
+  security_session_redis_data:
