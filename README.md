@@ -202,7 +202,7 @@ The service uses three tables.
 Stores user session information.
 
 - Fields:
-`
+```
 id
 user_id
 session_token
@@ -210,13 +210,14 @@ device_id
 ip_address
 created_at
 expires_at
-active`
+active
+```
 ### user_devices
 
 Stores registered user device information.
 
 - Fields:
-`
+```
 id
 user_id
 device_id
@@ -224,13 +225,14 @@ device_name
 ip_address
 created_at
 last_used_at
-active`
+active
+```
 ### login_history
 
 Stores successful and failed login attempts.
 
 Fields:
-`
+```
 id
 user_id
 device_id
@@ -238,7 +240,7 @@ ip_address
 login_time
 success
 failure_reason
-`
+```
 ## Redis
 
 Redis is used for fast session storage.
@@ -263,3 +265,93 @@ session:8b4dbbbd-6fe0-4007-8997-a7bcd7a0e77a
 `
 101:DEVICE-002
 `
+## Docker Compose
+
+The project uses Docker Compose for PostgreSQL and Redis.
+
+- Start services
+`docker compose up -d`
+- Check containers
+`docker ps`
+
+- Expected containers:
+```
+security-session-postgres
+security-session-redis
+```
+- Stop services`
+docker compose down`
+
+Persistent volumes are used for PostgreSQL and Redis data.
+
+- Avoid using:
+`
+docker compose down -v`
+
+unless the database and Redis volumes are intentionally being deleted.
+## Redis Verification
+
+- Connect to Redis:
+`
+docker exec -it security-session-redis redis-cli
+`
+- Test connection:
+`
+PING
+`
+- Expected:
+`
+PONG
+`
+- Check session keys:
+`
+KEYS session:*
+`
+- Get a session:
+`
+GET session:<session-token>
+`
+- Check TTL:
+`
+TTL session:<session-token>
+`
+A newly created session has a TTL of approximately 3600 seconds.
+
+## Application
+
+- Service name:
+`
+security-session-service
+`
+- Port:
+`
+8087
+`
+- Base URL:
+`
+http://localhost:8087
+`
+- The application configuration is located at:
+`
+src/main/resources/application.properties`
+
+## Postman Testing
+
+### Recommended testing sequence:
+
+- Register Device
+- Get User Devices
+- Record Successful Login
+- Record Failed Login
+- Get Login History
+- Create Session
+- Get Session
+- Get User Sessions
+- Check Redis Session
+- Check Redis TTL
+- Terminate Session
+- Verify Redis Session Deleted
+- Validate Account Security
+
+# Author
+#Kirubakaran
