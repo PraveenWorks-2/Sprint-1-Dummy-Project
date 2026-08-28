@@ -1,0 +1,132 @@
+{
+  "info": {
+    "_postman_id": "f5f3f6d2-9b3f-4b9b-9f0e-tenant-service",
+    "name": "OneEnterprise - Tenant Management Service",
+    "description": "End-to-end Postman collection for Rayi Mohan's Tenant Management Service.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "tenantId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Tenant",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tenantCode\": \"ACME01\",\n  \"tenantName\": \"Acme India Pvt Ltd\",\n  \"legalName\": \"Acme India Private Limited\",\n  \"contactEmail\": \"admin@acme.example\",\n  \"contactPhone\": \"+91-9876543210\",\n  \"addressLine1\": \"100 MG Road\",\n  \"city\": \"Bengaluru\",\n  \"state\": \"Karnataka\",\n  \"country\": \"India\",\n  \"postalCode\": \"560001\",\n  \"timezone\": \"Asia/Kolkata\",\n  \"locale\": \"en-IN\"\n}"
+        },
+        "url": {"raw": "{{baseUrl}}/api/tenants", "host": ["{{baseUrl}}"], "path": ["api", "tenants"]}
+      },
+      "event": [{"listen": "test", "script": {"exec": [
+        "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+        "const json = pm.response.json();",
+        "pm.expect(json.id).to.exist;",
+        "pm.collectionVariables.set('tenantId', json.id);"
+      ]}}]
+    },
+    {
+      "name": "2. Get All Tenants",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "{{baseUrl}}/api/tenants", "host": ["{{baseUrl}}"], "path": ["api", "tenants"]}
+      }
+    },
+    {
+      "name": "3. Get Tenant By ID",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}"]}
+      }
+    },
+    {
+      "name": "4. Get Tenant Profile",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}/profile", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}", "profile"]}
+      }
+    },
+    {
+      "name": "5. Update Tenant Profile",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"tenantName\": \"Acme India Updated\",\n  \"legalName\": \"Acme India Private Limited\",\n  \"contactEmail\": \"support@acme.example\",\n  \"contactPhone\": \"+91-9000000000\",\n  \"addressLine1\": \"200 MG Road\",\n  \"city\": \"Bengaluru\",\n  \"state\": \"Karnataka\",\n  \"country\": \"India\",\n  \"postalCode\": \"560001\",\n  \"timezone\": \"Asia/Kolkata\",\n  \"locale\": \"en-IN\"\n}"},
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}/profile", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}", "profile"]}
+      }
+    },
+    {
+      "name": "6. Get Tenant Status",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}", "status"]}
+      }
+    },
+    {
+      "name": "7. Update Tenant Status",
+      "request": {
+        "method": "PATCH",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"status\": \"ACTIVE\"\n}"},
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}", "status"]}
+      }
+    },
+    {
+      "name": "8. Get Tenant Configuration",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}/configuration", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}", "configuration"]}
+      }
+    },
+    {
+      "name": "9. Update Tenant Configuration",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"currency\": \"INR\",\n  \"dateFormat\": \"dd-MM-yyyy\",\n  \"emailEnabled\": true,\n  \"notificationsEnabled\": true,\n  \"selfServiceEnabled\": true,\n  \"maxUsers\": 500\n}"},
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}/configuration", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}", "configuration"]}
+      }
+    },
+    {
+      "name": "10. Update Tenant",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"tenantName\": \"Acme India Final\",\n  \"legalName\": \"Acme India Private Limited\",\n  \"contactEmail\": \"admin@acme.example\",\n  \"contactPhone\": \"+91-9888888888\",\n  \"addressLine1\": \"300 MG Road\",\n  \"city\": \"Bengaluru\",\n  \"state\": \"Karnataka\",\n  \"country\": \"India\",\n  \"postalCode\": \"560001\",\n  \"timezone\": \"Asia/Kolkata\",\n  \"locale\": \"en-IN\"\n}"},
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}"]}
+      }
+    },
+    {
+      "name": "11. Deactivate Tenant",
+      "request": {
+        "method": "DELETE",
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}"]}
+      }
+    },
+    {
+      "name": "12. Get Tenant After Deactivation",
+      "request": {
+        "method": "GET",
+        "url": {"raw": "{{baseUrl}}/api/tenants/{{tenantId}}", "host": ["{{baseUrl}}"], "path": ["api", "tenants", "{{tenantId}}"]}
+      }
+    },
+    {
+      "name": "13. Validation Check",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {"mode": "raw", "raw": "{\n  \"tenantCode\": \"INVALID CODE!\",\n  \"tenantName\": \"\",\n  \"contactEmail\": \"not-an-email\"\n}"},
+        "url": {"raw": "{{baseUrl}}/api/tenants", "host": ["{{baseUrl}}"], "path": ["api", "tenants"]}
+      }
+    }
+  ]
+}
