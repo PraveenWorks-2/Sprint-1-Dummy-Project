@@ -12,10 +12,9 @@
     </parent>
 
     <groupId>com.enterprise</groupId>
-    <artifactId>organization-management</artifactId>
-    <version>1.0.0</version>
-    <name>organization-management</name>
-    <description>Sprint 1 Dummy Project - Team 2 - Organization Management (Naveen Kumar: Company Setup, Business Units)</description>
+    <artifactId>dummyproject</artifactId>
+    <name>dummyproject</name>
+    <description>OneEnterprise Cloud Platform - Role Management Service</description>
 
     <properties>
         <java.version>21</java.version>
