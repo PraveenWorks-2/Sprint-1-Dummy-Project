@@ -181,29 +181,27 @@ security-session-service/
     └── test/
         └── java/
 ```
-#Database
-PostgreSQL
+## Database
+### PostgreSQL
 
-#Database:
+- Database:`security_session_db`
 
-security_session_db
+- Host:`127.0.0.1`
 
-Host:`127.0.0.1`
+- Port:`5432`
 
-Port:`5432`
-
-Username:`postgres`
+- Username:`postgres`
 
 The PostgreSQL password is configured locally and should not be exposed in documentation or source control.
 
-#Database Tables
+## Database Tables
 
 The service uses three tables.
 
-##user_sessions
+### user_sessions
 Stores user session information.
 
-Fields:
+- Fields:
 `
 id
 user_id
@@ -212,12 +210,12 @@ device_id
 ip_address
 created_at
 expires_at
-active
-user_devices
-`
+active`
+### user_devices
+
 Stores registered user device information.
 
-Fields:
+- Fields:
 `
 id
 user_id
@@ -226,9 +224,9 @@ device_name
 ip_address
 created_at
 last_used_at
-active
-login_history
-`
+active`
+### login_history
+
 Stores successful and failed login attempts.
 
 Fields:
@@ -240,4 +238,28 @@ ip_address
 login_time
 success
 failure_reason
+`
+## Redis
+
+Redis is used for fast session storage.
+
+- Host:`
+127.0.0.1`
+- Port:`
+6379`
+- Session key:`
+session:<session-token>
+`
+- Session value:
+`<userId>:<deviceId>`
+- Session expiration:
+`
+1 hour`
+- Example:
+`
+session:8b4dbbbd-6fe0-4007-8997-a7bcd7a0e77a
+`
+- Example value:
+`
+101:DEVICE-002
 `
