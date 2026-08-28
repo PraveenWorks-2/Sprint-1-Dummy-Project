@@ -1,100 +1,103 @@
-## Team 4 — Authentication Module
+# Role-Permission Service - SRIVASANTHI
 
-### Implemented Features
+## 1. Overview
 
-The Team 4 Authentication module was implemented using Java 21, Spring Boot, Spring Data JPA, Hibernate, PostgreSQL, Spring Security, REST APIs, Maven and Postman.
+The Role-Permission Service is responsible for managing the relationship between roles and permissions in the application.
 
-### Authentication Features
+A role can have multiple permissions, and a permission can be assigned to multiple roles.
 
-- User Login API
-- JWT Authentication
-- JWT Token Generation and Validation
-- Login Request Validation
-- Account Enabled/Disabled Validation
-- Account Locked Validation
-- Invalid Credentials Handling
+This service provides APIs to:
 
-### Password Management
+- Assign a permission to a role
+- Retrieve role-permission mappings
+- Remove a permission from a role
+- Prevent duplicate role-permission assignments
+- Validate roles using the Role Service
+- Validate permissions using the Permission Service
 
-- BCrypt Password Encryption
-- Secure Password Storage
-- Password Change API
-- Current Password Verification
-- Password Policy Validation
-- Minimum Password Length Validation
-- Uppercase Character Validation
-- Lowercase Character Validation
-- Number Validation
-- Special Character Validation
+---
 
-### MFA Framework
+## 2. Technology Stack
 
-- Console-based OTP Generation
-- OTP Verification
-- OTP Expiration Handling
-- Invalid OTP Validation
-- OTP Reuse Prevention
+| Technology | Version / Usage |
+|---|---|
+| Java | 21 |
+| Spring Boot | 4.0.8 |
+| Spring Data JPA | Database persistence |
+| PostgreSQL | Database |
+| Spring Cloud OpenFeign | Service-to-service communication |
+| Lombok | Boilerplate code reduction |
+| Maven | Build and dependency management |
+| Postman | API testing |
 
-### Validation & Exception Handling
+---
 
-- Request validation using Jakarta Validation
-- Invalid credentials handling
-- Account disabled handling
-- Account locked handling
-- Invalid password handling
-- Password policy validation
-- Invalid/expired MFA OTP handling
+## 3. Service Information
 
-### Database
+| Property | Value |
+|---|---|
+| Service Name | Role-Permission Service |
+| Port | 8083 |
+| Database | PostgreSQL |
+| Communication | REST + OpenFeign |
 
-PostgreSQL database:
+## Development Workflow
 
-`dummyproject_team4`
+Recommended development flow:
 
-Authentication data is stored in the `users` table. Passwords are stored using BCrypt encryption rather than plain text.
+1. Start PostgreSQL
+2. Start Role-Permission Service
+3. Verify application startup
+4. Test Role APIs
+5. Test Permission APIs
+6. Test Role-Permission mapping
+7. Verify exception handling
+8. Run complete Postman collection
+9. Build Docker image
+10. Test Docker container
+11. Push changes to Git
+12. Create Pull Request
+    Build
 
-### API Testing
+## To create a production build:
 
-The implemented APIs were tested using Postman, including:
+1. [x] mvn clean package
+2. [x] 
+3. [x] The generated JAR will be available under:target/ Git
+4. [x] 
+5. [x] After completing the implementation:git status
+6. [x] 
+7. [x] Add the changes:git add .
+8. [x] 
+9. [x] Commit:git commit -m "Implement role permission management service"
+10. [x] 
+11. [x] Push the branch:git push origin <branch-name>
+12. [x] 
+13. [x] Then create a Pull Request for review.
+14. [x] 
+15. [x] Current Implementation
+16. [x] 
+17. [x] The Role-Permission Management Service has been implemented and tested locally.
+18. [x] 
+## The implementation includes:
+1. [ ] 
+2. [ ] * Role management
+3. [ ] * Permission management
+4. [ ] * Role-Permission association
+5. [ ] * DTO-based request/response handling
+6. [ ] * Entity and repository layers
+7. [ ] * Service-layer business logic
+8. [ ] * REST controllers
+9. [ ] * Validation
+10. [ ] * Exception handling
+11. [ ] * Postman API testing
+12. [ ] * Docker support
 
-- Login
-- JWT-protected API access
-- Password Change
-- Password Policy validation
-- MFA OTP generation
-- MFA OTP verification
-- Invalid OTP handling
-- Expired OTP handling
-- OTP reuse validation
 
-### Architecture
-```text
+### Author
 
-  Client / Postman
-         ↓
-  Controller
-         ↓
-  DTO
-         ↓
-  Service
-         ↓
-  ServiceImpl
-         ↓
-  Repository
-         ↓
-  Entity
-         ↓
-  PostgreSQL
-```
-# Team 4 Contribution
+# Srivasanthi
 
-# Sai Charan
-- Login
-- JWT Authentication
-- Login Validation
-- Validation and exception handling related to assigned features
 
-# Kirubakaran S.
-- Password Encryption
-- Password Policy
-- MFA Framework
+### Module: Role-Permission Management Service
+
