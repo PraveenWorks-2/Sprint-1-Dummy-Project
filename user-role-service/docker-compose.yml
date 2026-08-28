@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: user-role-postgres
+    environment:
+      POSTGRES_DB: user_role_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - user_role_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  user_role_postgres_data:

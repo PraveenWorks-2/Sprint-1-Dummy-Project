@@ -1,0 +1,719 @@
+# User Role Service
+
+## 1. Project Overview
+
+The **User Role Service** is a Spring Boot microservice responsible for managing the relationship between users and roles.
+
+The service provides APIs to:
+
+* Assign a role to a user
+* Retrieve a user-role mapping
+* Retrieve all roles assigned to a user
+* Remove a role from a user
+* Retrieve user access mappings
+* Store user-role information in PostgreSQL
+* Integrate with the Role Service when role information/validation is required
+* Support Redis for caching
+* Support Kafka for event/message communication
+* Run the service using Docker-based infrastructure
+
+
+
+# 2. Technology Stack
+
+| Technology        | Purpose                          |
+| ----------------- | -------------------------------- |
+| Java 21           | Programming language             |
+| Spring Boot 3.3.4 | Application framework            |
+| Spring Data JPA   | Database access                  |
+| Hibernate         | ORM                              |
+| PostgreSQL        | Relational database              |
+| Maven             | Build and dependency management  |
+| REST API          | Communication between services   |
+| RestTemplate      | Service-to-service communication |
+| Redis             | Caching                          |
+| Apache Kafka      | Event/message communication      |
+| Docker            | Containerization                 |
+| Postman           | API testing                      |
+| Eclipse           | Development IDE                  |
+
+
+# 3. Application Architecture
+
+The service follows a layered architecture.
+
+
+                    Client / Postman
+                           |
+                           v
+                +----------------------+
+                | UserRoleController   |
+                +----------------------+
+                           |
+                           v
+                +----------------------+
+                | UserRoleService      |
+                +----------------------+
+                           |
+                           v
+                +----------------------+
+                | UserRoleServiceImpl  |
+                +----------------------+
+                           |
+                           v
+                +----------------------+
+                | UserRoleRepository   |
+                +----------------------+
+                           |
+                           v
+                    PostgreSQL DB
+
+
+External integrations:
+
+
+                    User Role Service
+                           |
+              +------------+------------+
+              |            |            |
+              v            v            v
+        Role Service     Redis        Kafka
+        Integration      Cache        Events
+
+
+
+
+# 4. Project Structure
+
+
+src/main/java
+└── com/oneenterprise/userrole
+    │
+    ├── UserRoleApplication.java
+    │
+    ├── controller
+    │   └── UserRoleController.java
+    │
+    ├── service
+    │   └── UserRoleService.java
+    │
+    ├── serviceimpl
+    │   └── UserRoleServiceImpl.java
+    │
+    ├── repository
+    │   └── UserRoleRepository.java
+    │
+    ├── entity
+    │   └── UserRole.java
+    │
+    ├── dto
+    │   ├── UserRoleRequest.java
+    │   ├── UserRoleResponse.java
+    │   
+    │
+    ├
+    │ 
+    │
+    ├── config
+    │   └── Redis/Kafka configuration classes
+    │
+    └── exception
+        └── Exception handling classes
+
+
+
+
+# 5. Database
+
+The service uses **PostgreSQL**.
+
+## Database
+
+
+Database Name: userrole
+
+
+The database configuration is provided through:
+
+
+src/main/resources/application.properties
+
+
+Example:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/userrole
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+server.port=8081
+
+
+Replace:
+
+YOUR_PASSWORD
+
+
+with the PostgreSQL password configured on the local machine.
+
+
+
+
+
+# 7. Main DTOs
+
+## UserRoleRequest
+
+Used when assigning a role to a user.
+
+Example:
+
+json
+{
+  "userId": 101,
+  "roleId": 1
+}
+
+
+Fields:
+
+
+userId
+roleId
+
+
+Both fields are required.
+
+
+
+## UserRoleResponse
+
+Used to return user-role information.
+
+Example:
+
+```json
+{
+  "id": 1,
+  "userId": 101,
+  "roleId": 1
+}
+```
+
+The exact response depends on the fields configured in the current DTO.
+
+---
+
+# 8. REST APIs
+
+The User Role Service exposes the following APIs.
+
+## 8.1 Assign Role to User
+
+### Endpoint
+
+```text
+POST /api/v1/user-roles
+```
+
+### Full URL
+
+```text
+http://localhost:8081/api/v1/user-roles
+```
+
+### Request Body
+
+```json
+{
+  "userId": 101,
+  "roleId": 1
+}
+```
+
+### Purpose
+
+Assigns a role to a particular user and stores the mapping in the `user_roles` table.
+
+---
+
+# 9. Get User Role by ID
+
+### Endpoint
+
+```text
+GET /api/v1/user-roles/{id}
+```
+
+### Example
+
+```text
+GET http://localhost:8081/api/v1/user-roles/1
+```
+
+### Purpose
+
+Retrieves a particular user-role mapping using its ID.
+
+### Example Response
+
+```json
+{
+  "id": 1,
+  "userId": 101,
+  "roleId": 1
+}
+```
+
+---
+
+# 10. Get Roles by User ID
+
+### Endpoint
+
+```text
+GET /api/v1/user-roles/user/{userId}
+```
+
+### Example
+
+```text
+GET http://localhost:8081/api/v1/user-roles/user/101
+```
+
+### Purpose
+
+Retrieves all roles assigned to a particular user.
+
+### Example Response
+
+```json
+[
+  {
+    "id": 1,
+    "userId": 101,
+    "roleId": 1
+  },
+  {
+    "id": 2,
+    "userId": 101,
+    "roleId": 2
+  }
+]
+```
+
+---
+
+# 11. Remove User Role
+
+### Endpoint
+
+```text
+DELETE /api/v1/user-roles/{id}
+```
+
+### Example
+
+```text
+DELETE http://localhost:8081/api/v1/user-roles/1
+```
+
+### Purpose
+
+Deletes an existing user-role mapping.
+
+---
+
+# 12. Get User Access Mapping
+
+### Endpoint
+
+```text
+GET /api/v1/user-roles/access/{userId}
+```
+
+### Example
+
+```text
+GET http://localhost:8081/api/v1/user-roles/access/101
+```
+
+### Purpose
+
+Retrieves the role/access mapping associated with a user.
+
+---
+
+# 13. API Summary
+
+| Method | Endpoint                             | Purpose                 |
+| ------ | ------------------------------------ | ----------------------- |
+| POST   | `/api/v1/user-roles`                 | Assign role to user     |
+| GET    | `/api/v1/user-roles/{id}`            | Get user-role by ID     |
+| GET    | `/api/v1/user-roles/user/{userId}`   | Get roles of user       |
+| DELETE | `/api/v1/user-roles/{id}`            | Remove user role        |
+| GET    | `/api/v1/user-roles/access/{userId}` | Get user access mapping |
+
+---
+
+# 14. Role Service Integration
+
+The User Role Service may communicate with a separate **Role Service** to retrieve or validate role information.
+
+The Role Service is a separate microservice and should not be copied into this project.
+
+Communication follows:
+
+```text
+User Role Service
+       |
+       | HTTP Request
+       v
+Role Service
+       |
+       v
+Role Information
+```
+
+For example, a role lookup may use:
+
+```text
+GET /api/v1/roles/{roleId}
+```
+
+The actual Role Service URL and security configuration must match the team's deployed Role Service.
+
+---
+
+# 15. Redis Integration
+
+Redis is used as a caching layer.
+
+The purpose of Redis is to reduce repeated database/service calls for frequently requested data.
+
+General flow:
+
+```text
+Client
+  |
+  v
+User Role Service
+  |
+  +----> Redis
+  |        |
+  |        +-- Cache Hit ---> Return data
+  |
+  +----> PostgreSQL
+           |
+           +-- Cache result in Redis
+```
+
+Redis configuration can be provided through:
+
+```properties
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+```
+
+Redis can be run using Docker.
+
+Example:
+
+```bash
+docker run --name userrole-redis -p 6379:6379 -d redis
+```
+
+Verify Redis:
+
+```bash
+docker ps
+```
+
+If `redis-cli` is available:
+
+```bash
+redis-cli ping
+```
+
+Expected result:
+
+```text
+PONG
+```
+
+---
+
+# 16. Kafka Integration
+
+Apache Kafka is used for asynchronous event/message communication.
+
+A possible event flow is:
+
+```text
+User Role Service
+       |
+       | Role Assigned Event
+       v
+     Kafka
+       |
+       v
+Other Services
+```
+
+For example, when a role is successfully assigned:
+
+```text
+UserRoleAssigned
+```
+
+can be published as a Kafka event if required by the project architecture.
+
+Kafka configuration depends on the team's Kafka setup.
+
+Example configuration:
+
+```properties
+spring.kafka.bootstrap-servers=localhost:9092
+```
+
+The actual bootstrap server should match the Kafka environment being used by the team.
+
+---
+
+# 17. Docker
+
+Docker is used to run supporting infrastructure such as Redis and Kafka.
+
+Check Docker installation:
+
+```bash
+docker --version
+```
+
+Check running containers:
+
+```bash
+docker ps
+```
+
+Example Redis container:
+
+```bash
+docker run --name userrole-redis -p 6379:6379 -d redis
+```
+
+Kafka should be started using the Kafka/Docker configuration agreed upon by the team.
+
+---
+
+# 18. Running the Application
+
+## Step 1: Clone the Project
+
+Clone the project repository:
+
+```bash
+git clone <repository-url>
+```
+
+Navigate to the project:
+
+```bash
+cd Sprint-1-Dummy-Project
+```
+
+---
+
+## Step 2: Configure PostgreSQL
+
+Make sure PostgreSQL is running.
+
+Create/use the required database.
+
+Configure:
+
+```text
+spring.datasource.url
+spring.datasource.username
+spring.datasource.password
+```
+
+inside:
+
+```text
+application.properties
+```
+
+---
+
+## Step 3: Start Redis
+
+Start Redis:
+
+```bash
+docker start userrole-redis
+```
+
+or create it:
+
+```bash
+docker run --name userrole-redis -p 6379:6379 -d redis
+```
+
+Verify:
+
+```bash
+docker ps
+```
+
+---
+
+## Step 4: Start Kafka
+
+Start Kafka according to the team's Kafka/Docker configuration.
+
+Verify that the Kafka broker is running before testing Kafka-dependent functionality.
+
+---
+
+## Step 5: Build the Application
+
+Using Maven:
+
+```bash
+mvn clean install
+```
+
+If Maven Wrapper is available:
+
+```bash
+mvnw clean install
+```
+
+On Windows:
+
+```bash
+mvnw.cmd clean install
+```
+
+---
+
+## Step 6: Run Spring Boot
+
+Run the main Spring Boot application:
+
+```text
+UserRoleApplication.java
+```
+
+The application should start on:
+
+```text
+http://localhost:8081
+```
+
+The console should show:
+
+```text
+Tomcat started on port 8081
+```
+
+---
+
+# 19. Testing Using Postman
+
+Postman can be used to test all User Role APIs.
+
+## Test 1: Assign Role
+
+Method:
+
+```text
+POST
+```
+
+URL:
+
+```text
+http://localhost:8081/api/v1/user-roles
+```
+
+Body → raw → JSON:
+
+```json
+{
+  "userId": 101,
+  "roleId": 1
+}
+```
+
+---
+
+## Test 2: Get Mapping
+
+Method:
+
+```text
+GET
+```
+
+URL:
+
+```text
+http://localhost:8081/api/v1/user-roles/1
+```
+
+---
+
+## Test 3: Get User Roles
+
+Method:
+
+```text
+GET
+```
+
+URL:
+
+```text
+http://localhost:8081/api/v1/user-roles/user/101
+```
+
+---
+
+## Test 4: Get Access Mapping
+
+Method:
+
+```text
+GET
+```
+
+URL:
+
+```text
+http://localhost:8081/api/v1/user-roles/access/101
+```
+
+---
+
+## Test 5: Delete Mapping
+
+Method:
+
+```text
+DELETE
+```
+
+URL:
+
+```text
+http://localhost:8081/api/v1/user-roles/1
+```
+
+---
+
