@@ -1,0 +1,207 @@
+{
+  "info": {
+    "_postman_id": "336d51fd-f96c-4792-8c19-406b05ae494c",
+    "name": "permission service management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57410264",
+    "_collection_link": "https://go.postman.co/collection/57410264-336d51fd-f96c-4792-8c19-406b05ae494c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "post method",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Create User\",\r\n  \"code\": \"USER_CREATE_1\",\r\n  \"description\": \"Allows creating new users\",\r\n  \"category\": \"USER_MANAGEMENT\",\r\n  \"module\": \"USER\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/permissions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all method",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/permissions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get by id",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/permissions/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "update method",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Create New User\",\r\n    \"description\": \"allows administrator to create users\",\r\n    \"category\": \"USER_MANAGEMENT\",\r\n    \"module\": \"USER\",\r\n    \"active\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/permissions/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Deactivate",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/permissions/3/deactivate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions",
+            "3",
+            "deactivate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete by id",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/permissions/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get method/category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/permissions/category/USER_MANAGEMENT",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions",
+            "category",
+            "USER_MANAGEMENT"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get method by module",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/permissions/module/USER",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "permissions",
+            "module",
+            "USER"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
