@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Audit & Activity Service",
+    "description": "OneEnterprise Sprint Common Microservices Project - Audit & Activity Service API collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8086/api/v1/audit-logs"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Audit Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 1,\n  \"tenantId\": 1,\n  \"action\": \"LOGIN\",\n  \"module\": \"AUTH\",\n  \"entityName\": \"User\",\n  \"entityId\": \"1\",\n  \"description\": \"User logged in successfully\",\n  \"ipAddress\": \"127.0.0.1\",\n  \"sourceService\": \"security-session-service\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      }
+    },
+    {
+      "name": "Get All Audit Logs",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      }
+    },
+    {
+      "name": "Get Audit Log By ID",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/1", "host": ["{{baseUrl}}"], "path": ["1"] }
+      }
+    },
+    {
+      "name": "Get Audit Logs By User ID",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/user/1", "host": ["{{baseUrl}}"], "path": ["user", "1"] }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Tenant ID",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/tenant/1", "host": ["{{baseUrl}}"], "path": ["tenant", "1"] }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Action",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/action/LOGIN", "host": ["{{baseUrl}}"], "path": ["action", "LOGIN"] }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Source Service",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/source/security-session-service",
+          "host": ["{{baseUrl}}"],
+          "path": ["source", "security-session-service"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Trail For Entity",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/entity/User/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["entity", "User", "1"]
+        }
+      }
+    },
+    {
+      "name": "Error - Validation Failure (missing fields)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 2,\n  \"description\": \"Missing action and source service\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] }
+      }
+    },
+    {
+      "name": "Error - Not Found (invalid ID)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/9999", "host": ["{{baseUrl}}"], "path": ["9999"] }
+      }
+    },
+    {
+      "name": "Error - Invalid Action Enum",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/action/BLAHBLAH",
+          "host": ["{{baseUrl}}"],
+          "path": ["action", "BLAHBLAH"]
+        }
+      }
+    }
+  ]
+}
