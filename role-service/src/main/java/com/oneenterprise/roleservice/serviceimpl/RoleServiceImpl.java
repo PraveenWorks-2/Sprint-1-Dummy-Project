@@ -15,13 +15,14 @@ import com.oneenterprise.roleservice.exception.RoleNotFoundException;
 import com.oneenterprise.roleservice.repository.RoleRepository;
 import com.oneenterprise.roleservice.service.RoleService;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+
+    public RoleServiceImpl(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     @Transactional
@@ -30,13 +31,12 @@ public class RoleServiceImpl implements RoleService {
             throw new RoleAlreadyExistsException("Role '" + requestDto.getRoleName() + "' already exists for tenant: " + requestDto.getTenantId());
         }
 
-        Role role = Role.builder()
-                .roleName(requestDto.getRoleName().trim().toUpperCase())
-                .description(requestDto.getDescription())
-                .tenantId(requestDto.getTenantId())
-                .isCustom(requestDto.getIsCustom() != null ? requestDto.getIsCustom() : false)
-                .isActive(true)
-                .build();
+        Role role = new Role();
+        role.setRoleName(requestDto.getRoleName().trim().toUpperCase());
+        role.setDescription(requestDto.getDescription());
+        role.setTenantId(requestDto.getTenantId());
+        role.setIsCustom(requestDto.getIsCustom() != null ? requestDto.getIsCustom() : false);
+        role.setIsActive(true);
 
         return mapToDto(roleRepository.save(role));
     }
@@ -111,15 +111,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private RoleResponseDto mapToDto(Role role) {
-        return RoleResponseDto.builder()
-                .id(role.getId())
-                .roleName(role.getRoleName())
-                .description(role.getDescription())
-                .tenantId(role.getTenantId())
-                .isCustom(role.getIsCustom())
-                .isActive(role.getIsActive())
-                .createdAt(role.getCreatedAt())
-                .updatedAt(role.getUpdatedAt())
-                .build();
+        return new RoleResponseDto(
+                role.getId(),
+                role.getRoleName(),
+                role.getDescription(),
+                role.getTenantId(),
+                role.getIsCustom(),
+                role.getIsActive(),
+                role.getCreatedAt(),
+                role.getUpdatedAt()
+        );
     }
 }

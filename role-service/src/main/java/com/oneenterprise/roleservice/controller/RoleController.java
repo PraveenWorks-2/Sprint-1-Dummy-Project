@@ -1,30 +1,40 @@
 package com.oneenterprise.roleservice.controller;
 
+import java.util.List;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.oneenterprise.roleservice.dto.RoleRequestDto;
 import com.oneenterprise.roleservice.dto.RoleResponseDto;
 import com.oneenterprise.roleservice.dto.RoleUpdateDto;
 import com.oneenterprise.roleservice.service.RoleService;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/roles")
-@RequiredArgsConstructor
 public class RoleController {
 
     private final RoleService roleService;
 
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
     @PostMapping
     public ResponseEntity<RoleResponseDto> createRole(@Valid @RequestBody RoleRequestDto requestDto) {
-        RoleResponseDto created = roleService.createRole(requestDto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(roleService.createRole(requestDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -35,7 +45,7 @@ public class RoleController {
     @GetMapping
     public ResponseEntity<List<RoleResponseDto>> getAllRoles(
             @RequestParam String tenantId,
-            @RequestParam(required = false, defaultValue = "false") Boolean activeOnly) {
+            @RequestParam(required = false) Boolean activeOnly) {
         return ResponseEntity.ok(roleService.getAllRoles(tenantId, activeOnly));
     }
 
@@ -52,14 +62,14 @@ public class RoleController {
     }
 
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<String> deactivateRole(@PathVariable Long id) {
+    public ResponseEntity<Void> deactivateRole(@PathVariable Long id) {
         roleService.deactivateRole(id);
-        return ResponseEntity.ok("Role deactivated successfully.");
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRole(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
-        return ResponseEntity.ok("Role deleted successfully.");
+        return ResponseEntity.noContent().build();
     }
 }

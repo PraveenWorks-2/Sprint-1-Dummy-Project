@@ -1,20 +1,41 @@
 package com.oneenterprise.roleservice.dto;
 
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class RoleUpdateDto {
 
-    @Size(min = 2, max = 100, message = "Role name must be between 2 and 100 characters")
     private String roleName;
-
-    @Size(max = 255, message = "Description cannot exceed 255 characters")
     private String description;
-
     private Boolean isActive;
+
+    public RoleUpdateDto() {
+    }
+
+    public RoleUpdateDto(String roleName, String description, Boolean isActive) {
+        this.roleName = roleName;
+        this.description = description;
+        this.isActive = isActive;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 }
