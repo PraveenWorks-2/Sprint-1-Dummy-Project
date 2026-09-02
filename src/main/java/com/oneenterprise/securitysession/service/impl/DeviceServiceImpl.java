@@ -4,6 +4,7 @@ import com.oneenterprise.securitysession.dto.DeviceRequest;
 import com.oneenterprise.securitysession.dto.DeviceResponse;
 import com.oneenterprise.securitysession.entity.UserDevice;
 import com.oneenterprise.securitysession.exception.ResourceNotFoundException;
+import com.oneenterprise.securitysession.kafka.SecurityEventProducer;
 import com.oneenterprise.securitysession.repository.UserDeviceRepository;
 import com.oneenterprise.securitysession.service.DeviceService;
 
@@ -17,9 +18,12 @@ import java.util.List;
 public class DeviceServiceImpl implements DeviceService {
 
     private final UserDeviceRepository repository;
+    private final SecurityEventProducer securityEventProducer;
 
-    public DeviceServiceImpl(UserDeviceRepository repository) {
+    public DeviceServiceImpl(UserDeviceRepository repository,
+    									SecurityEventProducer securityEventProducer) {
         this.repository = repository;
+        this.securityEventProducer = securityEventProducer;
     }
 
     @Override
@@ -44,7 +48,19 @@ public class DeviceServiceImpl implements DeviceService {
         device.setLastUsedAt(LocalDateTime.now());
         device.setActive(true);
 
-        return map(repository.save(device));
+        UserDevice saved = repository.save(device);
+
+        securityEventProducer.publish(
+                "DEVICE_REGISTERED",
+                saved.getUserId(),
+                null,
+                saved.getDeviceId(),
+                saved.getIpAddress(),
+                true,
+                "User device registered"
+        );
+
+        return map(saved);
     }
 
     @Override
@@ -78,7 +94,18 @@ public class DeviceServiceImpl implements DeviceService {
                                 "Device not found with ID: " + id));
 
         device.setActive(false);
-        repository.save(device);
+
+        UserDevice saved = repository.save(device);
+
+        securityEventProducer.publish(
+                "DEVICE_DEACTIVATED",
+                saved.getUserId(),
+                null,
+                saved.getDeviceId(),
+                saved.getIpAddress(),
+                true,
+                "User device deactivated"
+        );
     }
 
     private DeviceResponse map(UserDevice device) {

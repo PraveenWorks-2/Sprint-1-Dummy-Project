@@ -3,6 +3,7 @@ package com.oneenterprise.securitysession.service.impl;
 import com.oneenterprise.securitysession.dto.LoginHistoryRequest;
 import com.oneenterprise.securitysession.dto.LoginHistoryResponse;
 import com.oneenterprise.securitysession.entity.LoginHistory;
+import com.oneenterprise.securitysession.kafka.SecurityEventProducer;
 import com.oneenterprise.securitysession.repository.LoginHistoryRepository;
 import com.oneenterprise.securitysession.service.LoginHistoryService;
 
@@ -15,11 +16,13 @@ import java.util.List;
 public class LoginHistoryServiceImpl implements LoginHistoryService {
 
     private final LoginHistoryRepository repository;
+    private final SecurityEventProducer securityEventProducer;
 
     public LoginHistoryServiceImpl(
-            LoginHistoryRepository repository) {
+            LoginHistoryRepository repository, SecurityEventProducer securityEventProducer) {
 
         this.repository = repository;
+		this.securityEventProducer = securityEventProducer;
     }
 
     @Override
@@ -35,7 +38,25 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
                 .failureReason(request.getFailureReason())
                 .build();
 
-        return map(repository.save(history));
+        LoginHistory saved = repository.save(history);
+
+        String eventType = saved.isSuccess()
+                ? "LOGIN_SUCCESS"
+                : "LOGIN_FAILED";
+
+        securityEventProducer.publish(
+                eventType,
+                saved.getUserId(),
+                null,
+                saved.getDeviceId(),
+                saved.getIpAddress(),
+                saved.isSuccess(),
+                saved.isSuccess()
+                        ? "Successful login recorded"
+                        : "Failed login recorded"
+        );
+
+        return map(saved);
     }
 
     @Override

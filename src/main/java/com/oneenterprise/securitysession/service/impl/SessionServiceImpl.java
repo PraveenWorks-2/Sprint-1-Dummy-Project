@@ -4,6 +4,7 @@ import com.oneenterprise.securitysession.dto.SessionRequest;
 import com.oneenterprise.securitysession.dto.SessionResponse;
 import com.oneenterprise.securitysession.entity.UserSession;
 import com.oneenterprise.securitysession.exception.ResourceNotFoundException;
+import com.oneenterprise.securitysession.kafka.SecurityEventProducer;
 import com.oneenterprise.securitysession.redis.SessionRedisService;
 import com.oneenterprise.securitysession.repository.UserSessionRepository;
 import com.oneenterprise.securitysession.service.SessionService;
@@ -21,13 +22,16 @@ public class SessionServiceImpl implements SessionService {
 
     private final UserSessionRepository sessionRepository;
     private final SessionRedisService redisService;
+    private final SecurityEventProducer securityEventProducer;
 
     public SessionServiceImpl(
             UserSessionRepository sessionRepository,
-            SessionRedisService redisService) {
+            SessionRedisService redisService,
+            SecurityEventProducer securityEventProducer) {
 
         this.sessionRepository = sessionRepository;
         this.redisService = redisService;
+		this.securityEventProducer = securityEventProducer;
     }
 
     @Override
@@ -56,6 +60,15 @@ public class SessionServiceImpl implements SessionService {
                 request.getUserId(),
                 request.getDeviceId(),
                 Duration.ofHours(1)
+        );
+        securityEventProducer.publish(
+                "SESSION_CREATED",
+                saved.getUserId(),
+                saved.getId(),
+                saved.getDeviceId(),
+                saved.getIpAddress(),
+                true,
+                "User session created"
         );
 
         return mapToResponse(saved);
@@ -96,6 +109,15 @@ public class SessionServiceImpl implements SessionService {
 
         redisService.deleteSession(
                 session.getSessionToken()
+        );
+        securityEventProducer.publish(
+                "SESSION_TERMINATED",
+                session.getUserId(),
+                session.getId(),
+                session.getDeviceId(),
+                session.getIpAddress(),
+                true,
+                "User session terminated"
         );
     }
 
