@@ -3,10 +3,15 @@ package com.enterprise.auditservice.kafka;
 import com.enterprise.auditservice.dto.request.AuditLogRequest;
 import com.enterprise.auditservice.enums.AuditAction;
 import com.enterprise.auditservice.service.AuditLogService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class AuditEventListener {
@@ -14,9 +19,11 @@ public class AuditEventListener {
     private static final Logger log = LoggerFactory.getLogger(AuditEventListener.class);
 
     private final AuditLogService auditLogService;
+    private final Validator validator;
 
-    public AuditEventListener(AuditLogService auditLogService) {
+    public AuditEventListener(AuditLogService auditLogService, Validator validator) {
         this.auditLogService = auditLogService;
+        this.validator = validator;
     }
 
     @KafkaListener(topics = "${audit.kafka.topics.role-events}", groupId = "${spring.kafka.consumer.group-id}")
@@ -63,6 +70,15 @@ public class AuditEventListener {
                 .description(event.getDescription())
                 .sourceService(event.getSourceService())
                 .build();
+
+        Set<ConstraintViolation<AuditLogRequest>> violations = validator.validate(request);
+        if (!violations.isEmpty()) {
+            String errors = violations.stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .collect(Collectors.joining(", "));
+            log.error("Rejected invalid audit event from {}: {}", event.getSourceService(), errors);
+            return;
+        }
 
         auditLogService.createAuditLog(request);
     }
