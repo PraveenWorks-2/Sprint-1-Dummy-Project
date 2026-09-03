@@ -1,111 +1,90 @@
 package com.oneenterprise.securitysession.kafka;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
+ 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-
+ 
 @Component
 public class SecurityEventProducer {
-
+ 
+    private static final String SOURCE_SERVICE = "security-session-service";
+ 
     private final KafkaTemplate<String, String> kafkaTemplate;
-
+ 
     @Value("${app.kafka.topic.security-activity}")
     private String securityActivityTopic;
-
-    public SecurityEventProducer(
-            KafkaTemplate<String, String> kafkaTemplate) {
-
+ 
+    public SecurityEventProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-
+ 
+    /**
+     * @param action     must match AuditAction enum: CREATE, UPDATE, DELETE,
+     *                   LOGIN, LOGOUT, ROLE_ASSIGNED, ROLE_REMOVED,
+     *                   PERMISSION_GRANTED, PERMISSION_REVOKED, ACCESS_DENIED, OTHER
+     * @param tenantId   tenant context for this activity
+     * @param userId     the acting user's id
+     * @param entityName e.g. "UserSession", "LoginHistory"
+     * @param entityId   id of the affected entity, as a string
+     * @param description human-readable summary of what happened
+     */
     public void publish(
-            String eventType,
+            String action,
+            Long tenantId,
             Long userId,
-            Long sessionId,
-            String deviceId,
-            String ipAddress,
-            Boolean success,
-            String details) {
-
-        String eventId = UUID.randomUUID().toString();
-
+            String entityName,
+            String entityId,
+            String description) {
+ 
         String payload = """
                 {
-                  "eventId": "%s",
-                  "eventType": "%s",
                   "userId": %s,
-                  "sessionId": %s,
-                  "deviceId": %s,
-                  "ipAddress": %s,
-                  "success": %s,
-                  "details": "%s",
-                  "timestamp": "%s"
+                  "tenantId": %s,
+                  "action": "%s",
+                  "module": "SECURITY",
+                  "entityName": "%s",
+                  "entityId": "%s",
+                  "description": "%s",
+                  "sourceService": "%s"
                 }
                 """.formatted(
-                escape(eventId),
-                escape(eventType),
                 userId == null ? "null" : userId.toString(),
-                sessionId == null ? "null" : sessionId.toString(),
-                jsonString(deviceId),
-                jsonString(ipAddress),
-                success == null ? "null" : success.toString(),
-                escape(details == null ? "" : details),
-                LocalDateTime.now()
+                tenantId == null ? "null" : tenantId.toString(),
+                escape(action),
+                escape(entityName),
+                escape(entityId),
+                escape(description == null ? "" : description),
+                SOURCE_SERVICE
         );
-
-        String key = userId != null
-                ? userId.toString()
-                : eventId;
-
-        kafkaTemplate.send(
-                securityActivityTopic,
-                key,
-                payload
-        ).whenComplete((result, exception) -> {
-
-            if (exception != null) {
-
-                System.err.println(
-                        "Kafka event publish failed. "
-                        + "eventType=" + eventType
-                        + ", eventId=" + eventId
-                        + ", error=" + exception.getMessage()
-                );
-
-            } else {
-
-                System.out.println(
-                        "Kafka event published successfully. "
-                        + "eventType=" + eventType
-                        + ", eventId=" + eventId
-                        + ", topic=" + securityActivityTopic
-                        + ", partition="
-                        + result.getRecordMetadata().partition()
-                        + ", offset="
-                        + result.getRecordMetadata().offset()
-                );
-            }
-        });
+ 
+        String key = userId != null ? userId.toString() : SOURCE_SERVICE;
+ 
+        kafkaTemplate.send(securityActivityTopic, key, payload)
+                .whenComplete((result, exception) -> {
+                    if (exception != null) {
+                        System.err.println(
+                                "Kafka event publish failed. "
+                                + "action=" + action
+                                + ", userId=" + userId
+                                + ", error=" + exception.getMessage()
+                        );
+                    } else {
+                        System.out.println(
+                                "Kafka event published successfully. "
+                                + "action=" + action
+                                + ", userId=" + userId
+                                + ", topic=" + securityActivityTopic
+                                + ", partition=" + result.getRecordMetadata().partition()
+                                + ", offset=" + result.getRecordMetadata().offset()
+                        );
+                    }
+                });
     }
-
-    private String jsonString(String value) {
-
-        if (value == null) {
-            return "null";
-        }
-
-        return "\"" + escape(value) + "\"";
-    }
-
+ 
     private String escape(String value) {
-
         if (value == null) {
             return "";
         }
-
         return value
                 .replace("\\", "\\\\")
                 .replace("\"", "\\\"")

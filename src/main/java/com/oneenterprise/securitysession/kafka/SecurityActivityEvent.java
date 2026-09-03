@@ -1,113 +1,100 @@
 package com.oneenterprise.securitysession.kafka;
-
-import java.time.LocalDateTime;
-
+ 
 public class SecurityActivityEvent {
-
-    private String eventId;
-    private String eventType;
+ 
     private Long userId;
-    private Long sessionId;
-    private String deviceId;
-    private String ipAddress;
-    private Boolean success;
-    private String details;
-    private LocalDateTime timestamp;
-
+    private Long tenantId;
+    private String action;
+    private String module;
+    private String entityName;
+    private String entityId;
+    private String description;
+    private String sourceService;
+ 
     public SecurityActivityEvent() {
     }
-
+ 
     public SecurityActivityEvent(
-            String eventId,
-            String eventType,
             Long userId,
-            Long sessionId,
-            String deviceId,
-            String ipAddress,
-            Boolean success,
-            String details,
-            LocalDateTime timestamp) {
-
-        this.eventId = eventId;
-        this.eventType = eventType;
+            Long tenantId,
+            String action,
+            String module,
+            String entityName,
+            String entityId,
+            String description,
+            String sourceService) {
+ 
         this.userId = userId;
-        this.sessionId = sessionId;
-        this.deviceId = deviceId;
-        this.ipAddress = ipAddress;
-        this.success = success;
-        this.details = details;
-        this.timestamp = timestamp;
+        this.tenantId = tenantId;
+        this.action = action;
+        this.module = module;
+        this.entityName = entityName;
+        this.entityId = entityId;
+        this.description = description;
+        this.sourceService = sourceService;
     }
-
-    public String getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
+ 
     public Long getUserId() {
         return userId;
     }
-
+ 
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-
-    public Long getSessionId() {
-        return sessionId;
+ 
+    public Long getTenantId() {
+        return tenantId;
     }
-
-    public void setSessionId(Long sessionId) {
-        this.sessionId = sessionId;
+ 
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
-
-    public String getDeviceId() {
-        return deviceId;
+ 
+    public String getAction() {
+        return action;
     }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+ 
+    public void setAction(String action) {
+        this.action = action;
     }
-
-    public String getIpAddress() {
-        return ipAddress;
+ 
+    public String getModule() {
+        return module;
     }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+ 
+    public void setModule(String module) {
+        this.module = module;
     }
-
-    public Boolean getSuccess() {
-        return success;
+ 
+    public String getEntityName() {
+        return entityName;
     }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
+ 
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
-
-    public String getDetails() {
-        return details;
+ 
+    public String getEntityId() {
+        return entityId;
     }
-
-    public void setDetails(String details) {
-        this.details = details;
+ 
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
     }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+ 
+    public String getDescription() {
+        return description;
     }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+ 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+ 
+    public String getSourceService() {
+        return sourceService;
+    }
+ 
+    public void setSourceService(String sourceService) {
+        this.sourceService = sourceService;
     }
 }
