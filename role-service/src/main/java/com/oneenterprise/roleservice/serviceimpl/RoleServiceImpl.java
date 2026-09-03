@@ -31,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
 
     public RoleServiceImpl(RoleRepository roleRepository,
                            RoleEventProducer roleEventProducer,
-                           @Value("${tenant-service.url:http://localhost:8084}") String tenantServiceUrl) {
+                           @Value("${tenant-service.url:http://localhost:8083}") String tenantServiceUrl) {
         this.roleRepository = roleRepository;
         this.roleEventProducer = roleEventProducer;
         this.restClient = RestClient.builder().baseUrl(tenantServiceUrl).build();
@@ -145,9 +145,16 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private void validateTenant(String tenantId) {
+        // Validate UUID format first so invalid formats trigger 404
+        try {
+            java.util.UUID.fromString(tenantId);
+        } catch (IllegalArgumentException ex) {
+            throw new TenantNotFoundException("Tenant not found with ID: " + tenantId);
+        }
+
         try {
             restClient.get()
-                    .uri("/api/v1/tenants/{id}", tenantId)
+                    .uri("/api/tenants/{id}", tenantId)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                         throw new TenantNotFoundException("Tenant not found with ID: " + tenantId);
@@ -156,7 +163,7 @@ public class RoleServiceImpl implements RoleService {
         } catch (TenantNotFoundException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new TenantNotFoundException("Invalid tenant or Tenant Service unavailable: " + tenantId);
+            throw new TenantNotFoundException("Invalid tenant or Tenant Service unavailable: " + ex.getMessage());
         }
     }
 
