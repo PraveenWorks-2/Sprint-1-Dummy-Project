@@ -3,9 +3,10 @@ package com.oneenterprise.dummyproject.user.service.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +17,8 @@ import com.oneenterprise.dummyproject.user.dto.ImportErrorDto;
 import com.oneenterprise.dummyproject.user.dto.ImportSummaryDto;
 import com.oneenterprise.dummyproject.user.entity.User;
 import com.oneenterprise.dummyproject.user.enums.UserStatus;
-import com.oneenterprise.dummyproject.user.service.UserImportService;
 import com.oneenterprise.dummyproject.user.repository.UserRepository;
+import com.oneenterprise.dummyproject.user.service.UserImportService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,12 +46,20 @@ public class UserImportServiceImpl implements UserImportService {
             user.setFirstName(dto.getFirstName());
             user.setLastName(dto.getLastName());
             user.setEmail(dto.getEmail());
-            user.setPhone(dto.getPhone());
 
-            user.setPassword("Temp@123");
+            // Required fields from the new users table
+            user.setTenantId(dto.getTenantId());
+            user.setDepartmentId(dto.getDepartmentId());
+
             user.setStatus(UserStatus.ACTIVE);
-            user.setCreatedAt(LocalDateTime.now());
-            user.setUpdatedAt(LocalDateTime.now());
+
+            LocalDate today = LocalDate.now();
+
+            user.setCreatedAt(today);
+            user.setCreatedBy("SYSTEM");
+            user.setUpdatedAt(today);
+            user.setUpdatedBy("SYSTEM");
+            user.setDeleted(false);
 
             userRepository.save(user);
             success++;
@@ -81,7 +90,7 @@ public class UserImportServiceImpl implements UserImportService {
 
             String[] data = line.split(",");
 
-            if (data.length < 4) {
+            if (data.length < 5) {
                 errors.add(new ImportErrorDto(total, "", "Invalid CSV row"));
                 continue;
             }
@@ -89,27 +98,48 @@ public class UserImportServiceImpl implements UserImportService {
             String firstName = data[0].trim();
             String lastName = data[1].trim();
             String email = data[2].trim();
-            String phone = data[3].trim();
+            String tenantIdValue = data[3].trim();
+            String departmentIdValue = data[4].trim();
 
             if (userRepository.existsByEmail(email)) {
                 errors.add(new ImportErrorDto(total, email, "Email already exists"));
                 continue;
             }
 
-            User user = new User();
+            try {
+                UUID tenantId = UUID.fromString(tenantIdValue);
+                UUID departmentId = UUID.fromString(departmentIdValue);
 
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setPhone(phone);
+                User user = new User();
 
-            user.setPassword("Temp@123");
-            user.setStatus(UserStatus.ACTIVE);
-            user.setCreatedAt(LocalDateTime.now());
-            user.setUpdatedAt(LocalDateTime.now());
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setEmail(email);
+                user.setTenantId(tenantId);
+                user.setDepartmentId(departmentId);
 
-            userRepository.save(user);
-            success++;
+                user.setStatus(UserStatus.ACTIVE);
+
+                LocalDate today = LocalDate.now();
+
+                user.setCreatedAt(today);
+                user.setCreatedBy("SYSTEM");
+                user.setUpdatedAt(today);
+                user.setUpdatedBy("SYSTEM");
+                user.setDeleted(false);
+
+                userRepository.save(user);
+                success++;
+
+            } catch (IllegalArgumentException e) {
+                errors.add(
+                        new ImportErrorDto(
+                                total,
+                                email,
+                                "Invalid tenant ID or department ID"
+                        )
+                );
+            }
         }
 
         ImportSummaryDto summary = new ImportSummaryDto();

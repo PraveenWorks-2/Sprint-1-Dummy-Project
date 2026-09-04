@@ -2,7 +2,10 @@ package com.oneenterprise.dummyproject.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 public class UserRegistrationRequestDto {
@@ -17,9 +20,9 @@ public class UserRegistrationRequestDto {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Phone number is required")
-    private String phone;
+    @NotNull(message = "Tenant ID is required")
+    private UUID tenantId;
 
-    @NotBlank(message = "Password is required")
-    private String password;
+    @NotNull(message = "Department ID is required")
+    private UUID departmentId;
 }
