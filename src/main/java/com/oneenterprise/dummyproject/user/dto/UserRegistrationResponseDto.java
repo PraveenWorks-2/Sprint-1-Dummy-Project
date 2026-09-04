@@ -3,11 +3,13 @@ package com.oneenterprise.dummyproject.user.dto;
 import com.oneenterprise.dummyproject.user.enums.UserStatus;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
-
 public class UserRegistrationResponseDto {
+
+    private UUID id;
 
     private String firstName;
 
@@ -15,23 +17,23 @@ public class UserRegistrationResponseDto {
 
     private String email;
 
-    private String phone;
+    private UUID tenantId;
+
+    private UUID departmentId;
 
     private UserStatus status;
 
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
-    private LocalDateTime updatedAt;
+    private String createdBy;
 
-    public UserRegistrationResponseDto(Long id, String firstName, String lastName,
-                                       String email, String phone, UserStatus status,
-                                       LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private LocalDate updatedAt;
+
+    private String updatedBy;
+
+    private boolean deleted;
+
+    private LocalDate deletedAt;
+
+    private String deletedBy;
 }
