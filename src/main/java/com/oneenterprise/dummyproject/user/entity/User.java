@@ -6,50 +6,57 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
-@Table (name = "users")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(name = "first_name", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
 
-    @Column(name = "last_name",nullable = false)
+    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "phone",nullable = false)
-    private String phone;
+    @Column(name = "tenant_id", nullable = false)
+    private UUID tenantId;
 
-    @Column(name = "password",nullable = false)
-    private String password;
+    @Column(name = "department_id", nullable = false)
+    private UUID departmentId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false, length = 50)
     private UserStatus status;
 
-    @Column(name = "created_at",nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
 
-    @Column(name = "updated_at",nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "created_by", nullable = false, length = 50)
+    private String createdBy;
 
+    @Column(name = "updated_at", nullable = false)
+    private LocalDate updatedAt;
 
-    public User(String firstName, String lastName, String email, String phone, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-    }
+    @Column(name = "updated_by", nullable = false, length = 50)
+    private String updatedBy;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDate deletedAt;
+
+    @Column(name = "deleted_by", length = 50)
+    private String deletedBy;
 }
