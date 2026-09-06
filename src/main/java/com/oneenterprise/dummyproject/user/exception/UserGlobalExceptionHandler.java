@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 
-public class GlobalExceptionHandler {
+public class UserGlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFound(
             UserNotFoundException exception) {
