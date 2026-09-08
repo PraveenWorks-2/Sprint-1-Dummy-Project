@@ -29,6 +29,9 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     @Override
     public RolePermissionResponseDto assignPermissionToRole(RolePermissionRequestDto requestDto) {
 
+        validateId(requestDto.getRoleId(), "Role ID");
+        validateId(requestDto.getPermissionId(), "Permission ID");
+
         roleClient.getRoleById(requestDto.getRoleId());
 
         permissionClient.getPermissionById(requestDto.getPermissionId());
@@ -46,14 +49,17 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         rolePermission.setPermissionId(requestDto.getPermissionId());
         rolePermission.setCreatedAt(LocalDateTime.now());
 
-        RolePermission savedRolePermission =
-                rolePermissionRepository.save(rolePermission);
+        RolePermission savedRolePermission = rolePermissionRepository.save(rolePermission);
 
         return convertToResponse(savedRolePermission);
     }
 
     @Override
     public void removePermissionFromRole(Long roleId, Long permissionId) {
+
+        validateId(roleId, "Role ID");
+        validateId(permissionId, "Permission ID");
+
         RolePermission rolePermission = rolePermissionRepository
                 .findByRoleIdAndPermissionId(roleId, permissionId)
                 .orElseThrow(() -> new ResourceNotFoundException
@@ -64,6 +70,10 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public List<RolePermissionResponseDto> getPermissionsByRole(Long roleId) {
+
+        validateId(roleId, "Role ID");
+        roleClient.getRoleById(roleId);
+
         List<RolePermission> rolePermissions = rolePermissionRepository.findByRoleId(roleId);
 
         return rolePermissions.stream().map(this::convertToResponse).toList();
@@ -74,6 +84,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         List<RolePermission> rolePermissions =rolePermissionRepository.findAll();
 
         return rolePermissions.stream().map(this::convertToResponse).toList();
+    }
+
+    private void validateId(Long id, String fieldName) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException(fieldName + " must be greater than 0");
+        }
     }
 
     private RolePermissionResponseDto convertToResponse(RolePermission rolePermission) {
