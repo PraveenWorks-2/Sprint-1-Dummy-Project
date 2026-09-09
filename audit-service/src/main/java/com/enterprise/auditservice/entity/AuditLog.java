@@ -57,6 +57,9 @@ public class AuditLog {
 
     @Column(name = "source_service", length = 60)
     private String sourceService;
+    
+    @Column(name = "trace_id", length = 100)
+    private String traceId;
 
     @Builder.Default
     @Column(name = "created_at", nullable = false, updatable = false)

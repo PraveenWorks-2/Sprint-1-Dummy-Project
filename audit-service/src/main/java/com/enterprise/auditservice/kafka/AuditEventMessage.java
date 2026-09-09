@@ -22,4 +22,5 @@ public class AuditEventMessage {
     private String entityId;
     private String description;
     private String sourceService;
+    private String traceId;
 }

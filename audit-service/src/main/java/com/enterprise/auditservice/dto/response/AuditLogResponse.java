@@ -26,5 +26,6 @@ public class AuditLogResponse {
     private String description;
     private String ipAddress;
     private String sourceService;
+    private String traceId;
     private LocalDateTime createdAt;
 }

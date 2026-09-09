@@ -1,9 +1,11 @@
 package com.enterprise.auditservice.repository;
 
 import com.enterprise.auditservice.entity.AuditLog;
+
 import com.enterprise.auditservice.enums.AuditAction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -21,4 +23,8 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
     List<AuditLog> findByEntityNameAndEntityId(String entityName, String entityId);
 
     List<AuditLog> findByUserIdAndAction(Long userId, AuditAction action);
+    
+    List<AuditLog> findByTraceId(String traceId);
+    
+    List<AuditLog> findByCreatedAtBetween(LocalDateTime from, LocalDateTime to);
 }

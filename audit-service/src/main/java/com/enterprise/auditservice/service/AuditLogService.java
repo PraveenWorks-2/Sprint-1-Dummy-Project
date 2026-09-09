@@ -1,8 +1,9 @@
 package com.enterprise.auditservice.service;
 
-import com.enterprise.auditservice.dto.request.AuditLogRequest;
+import com.enterprise.auditservice.dto.request.AuditLogRequest; 
 import com.enterprise.auditservice.dto.response.AuditLogResponse;
 import com.enterprise.auditservice.enums.AuditAction;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface AuditLogService {
     List<AuditLogResponse> getAuditLogsBySourceService(String sourceService);
 
     List<AuditLogResponse> getAuditTrailForEntity(String entityName, String entityId);
+    
+    List<AuditLogResponse> getAuditLogsByTraceId(String traceId);
+    
+    List<AuditLogResponse> getAuditLogsByDateRange(LocalDateTime from, LocalDateTime to);
 }

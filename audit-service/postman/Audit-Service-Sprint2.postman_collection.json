@@ -1,0 +1,136 @@
+{
+  "info": {
+    "name": "Audit & Activity Service - Sprint 2",
+    "description": "Postman collection for audit-service endpoints (Sai Charan, OneEnterprise Sprint 2)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8086"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Audit Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 108,\n  \"tenantId\": 1,\n  \"action\": \"LOGIN\",\n  \"module\": \"SECURITY\",\n  \"entityName\": \"UserSession\",\n  \"entityId\": \"10\",\n  \"description\": \"Testing traceId field\",\n  \"sourceService\": \"audit-service-selftest\",\n  \"traceId\": \"trace-abc-123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs"]
+        }
+      }
+    },
+    {
+      "name": "Get All Audit Logs",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Log By Id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/13",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "13"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Logs By User Id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/user/108",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "user", "108"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Tenant Id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/tenant/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "tenant", "1"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Action",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/action/LOGIN",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "action", "LOGIN"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Source Service",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/source/security-session-service",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "source", "security-session-service"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Trail For Entity",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/entity/UserSession/10",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "entity", "UserSession", "10"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Trace Id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/trace/trace-abc-123",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "trace", "trace-abc-123"]
+        }
+      }
+    },
+    {
+      "name": "Get Audit Logs By Date Range",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/audit-logs/range?from=2026-09-09T00:00:00&to=2026-09-09T23:59:59",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "audit-logs", "range"],
+          "query": [
+            { "key": "from", "value": "2026-09-09T00:00:00" },
+            { "key": "to", "value": "2026-09-09T23:59:59" }
+          ]
+        }
+      }
+    }
+  ]
+}

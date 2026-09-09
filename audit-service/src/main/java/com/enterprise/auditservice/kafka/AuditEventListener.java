@@ -69,6 +69,7 @@ public class AuditEventListener {
                 .entityId(event.getEntityId())
                 .description(event.getDescription())
                 .sourceService(event.getSourceService())
+                .traceId(event.getTraceId())
                 .build();
 
         Set<ConstraintViolation<AuditLogRequest>> violations = validator.validate(request);

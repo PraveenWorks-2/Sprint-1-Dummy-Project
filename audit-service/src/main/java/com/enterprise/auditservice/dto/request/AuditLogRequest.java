@@ -40,4 +40,7 @@ public class AuditLogRequest {
     @NotBlank(message = "Source service is required")
     @Size(max = 60, message = "Source service must not exceed 60 characters")
     private String sourceService;
+    
+    @Size(max = 100, message = "Trace ID must not exceed 100 characters")
+    private String traceId;
 }

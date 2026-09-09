@@ -34,6 +34,7 @@ public class AuditLogServiceImpl implements AuditLogService {
                 .description(request.getDescription())
                 .ipAddress(request.getIpAddress())
                 .sourceService(request.getSourceService())
+                .traceId(request.getTraceId())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -95,6 +96,24 @@ public class AuditLogServiceImpl implements AuditLogService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+    
+
+    @Override
+    public List<AuditLogResponse> getAuditLogsByTraceId(String traceId) {
+        return auditLogRepository.findByTraceId(traceId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+    
+
+    @Override
+    public List<AuditLogResponse> getAuditLogsByDateRange(LocalDateTime from, LocalDateTime to) {
+        return auditLogRepository.findByCreatedAtBetween(from, to)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
 
     private AuditLogResponse mapToResponse(AuditLog auditLog) {
         return AuditLogResponse.builder()
@@ -108,6 +127,7 @@ public class AuditLogServiceImpl implements AuditLogService {
                 .description(auditLog.getDescription())
                 .ipAddress(auditLog.getIpAddress())
                 .sourceService(auditLog.getSourceService())
+                .traceId(auditLog.getTraceId())
                 .createdAt(auditLog.getCreatedAt())
                 .build();
     }
