@@ -212,6 +212,14 @@ public class MfaServiceImpl implements MfaService {
                 userId,
                 true
         );
+        securityEventProducer.publish(
+                "MFA_ENABLED",
+                1L,
+                userId,
+                "AccountSecurity",
+                userId.toString(),
+                "MFA enabled for user"
+        );
     }
 
     @Override
@@ -220,6 +228,14 @@ public class MfaServiceImpl implements MfaService {
         lockoutService.setMfaEnabled(
                 userId,
                 false
+        );
+        securityEventProducer.publish(
+                "MFA_DISABLED",
+                1L,
+                userId,
+                "AccountSecurity",
+                userId.toString(),
+                "MFA disabled for user"
         );
     }
 }

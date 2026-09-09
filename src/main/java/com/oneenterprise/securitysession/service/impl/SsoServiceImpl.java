@@ -70,6 +70,16 @@ public class SsoServiceImpl implements SsoService {
         lockoutService.recordSuccessfulAuthentication(
                 userId
         );
+        
+        securityEventProducer.publish(
+                "SSO_VALIDATION_SUCCESS",
+                1L,
+                userId,
+                "SsoValidation",
+                request.getExternalSubject(),
+                "SSO validation successful for provider "
+                        + request.getProvider()
+        );
 
         return SsoValidationResponse.builder()
                 .userId(userId)
