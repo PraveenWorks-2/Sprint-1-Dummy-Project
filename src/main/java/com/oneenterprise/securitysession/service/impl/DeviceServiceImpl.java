@@ -3,9 +3,12 @@ package com.oneenterprise.securitysession.service.impl;
 import com.oneenterprise.securitysession.dto.DeviceRequest;
 import com.oneenterprise.securitysession.dto.DeviceResponse;
 import com.oneenterprise.securitysession.entity.UserDevice;
+import com.oneenterprise.securitysession.entity.UserSession;
 import com.oneenterprise.securitysession.exception.ResourceNotFoundException;
 import com.oneenterprise.securitysession.kafka.SecurityEventProducer;
+import com.oneenterprise.securitysession.redis.SessionRedisService;
 import com.oneenterprise.securitysession.repository.UserDeviceRepository;
+import com.oneenterprise.securitysession.repository.UserSessionRepository;
 import com.oneenterprise.securitysession.service.DeviceService;
  
 import org.springframework.stereotype.Service;
@@ -19,11 +22,17 @@ public class DeviceServiceImpl implements DeviceService {
  
     private final UserDeviceRepository repository;
     private final SecurityEventProducer securityEventProducer;
+    private final UserSessionRepository sessionRepository;
+    private final SessionRedisService redisService;
  
     public DeviceServiceImpl(UserDeviceRepository repository,
-    									SecurityEventProducer securityEventProducer) {
+    									SecurityEventProducer securityEventProducer, 
+    									UserSessionRepository sessionRepository, 
+    									SessionRedisService redisService) {
         this.repository = repository;
         this.securityEventProducer = securityEventProducer;
+		this.sessionRepository = sessionRepository;
+		this.redisService = redisService;
     }
  
     @Override
@@ -86,23 +95,55 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     @Transactional
     public void deactivateDevice(Long id) {
- 
-        UserDevice device = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Device not found with ID: " + id));
- 
+
+        UserDevice device =
+                repository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Device not found with ID: " + id
+                                )
+                        );
+
         device.setActive(false);
- 
-        UserDevice saved = repository.save(device);
- 
+
+        UserDevice saved =
+                repository.save(device);
+
+        List<UserSession> sessions =
+                sessionRepository
+                        .findByUserIdAndDeviceIdAndActiveTrue(
+                                saved.getUserId(),
+                                saved.getDeviceId()
+                        );
+
+        for (UserSession session : sessions) {
+
+            session.setActive(false);
+
+            redisService.deleteSession(
+                    session.getSessionToken()
+            );
+
+            securityEventProducer.publish(
+                    "SESSION_INVALID",
+                    1L,
+                    session.getUserId(),
+                    "UserSession",
+                    session.getId().toString(),
+                    "Session invalidated because device was deactivated"
+            );
+        }
+
+        sessionRepository.saveAll(sessions);
+
         securityEventProducer.publish(
                 "DELETE",
                 1L,
                 saved.getUserId(),
                 "UserDevice",
                 saved.getId().toString(),
-                "User device deactivated: " + saved.getDeviceId()
+                "User device deactivated: "
+                        + saved.getDeviceId()
         );
     }
  

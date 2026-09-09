@@ -3,8 +3,10 @@ package com.oneenterprise.securitysession.service.impl;
 import com.oneenterprise.securitysession.dto.LoginHistoryRequest;
 import com.oneenterprise.securitysession.dto.LoginHistoryResponse;
 import com.oneenterprise.securitysession.entity.LoginHistory;
+import com.oneenterprise.securitysession.exception.SecurityValidationException;
 import com.oneenterprise.securitysession.kafka.SecurityEventProducer;
 import com.oneenterprise.securitysession.repository.LoginHistoryRepository;
+import com.oneenterprise.securitysession.service.AccountLockoutService;
 import com.oneenterprise.securitysession.service.LoginHistoryService;
  
 import org.springframework.stereotype.Service;
@@ -16,18 +18,30 @@ import java.util.List;
 public class LoginHistoryServiceImpl implements LoginHistoryService {
  
     private final LoginHistoryRepository repository;
+    private final AccountLockoutService lockoutService;
     private final SecurityEventProducer securityEventProducer;
  
     public LoginHistoryServiceImpl(
-            LoginHistoryRepository repository, SecurityEventProducer securityEventProducer) {
+            LoginHistoryRepository repository, 
+            AccountLockoutService lockoutService,
+            SecurityEventProducer securityEventProducer) {
  
         this.repository = repository;
+		this.lockoutService = lockoutService;
         this.securityEventProducer = securityEventProducer;
     }
  
     @Override
     public LoginHistoryResponse recordLogin(
             LoginHistoryRequest request) {
+    	
+    	if (lockoutService.isAccountLocked(
+    	        request.getUserId())) {
+
+    	    throw new SecurityValidationException(
+    	            "Account is locked"
+    	    );
+    	}
  
         LoginHistory history = LoginHistory.builder()
                 .userId(request.getUserId())
@@ -43,6 +57,18 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
         String action = saved.isSuccess()
                 ? "LOGIN"
                 : "ACCESS_DENIED";
+        if (saved.isSuccess()) {
+
+            lockoutService.recordSuccessfulAuthentication(
+                    saved.getUserId()
+            );
+
+        } else {
+
+            lockoutService.recordFailedAttempt(
+                    saved.getUserId()
+            );
+        }
  
         String description = saved.isSuccess()
                 ? "Successful login from device " + saved.getDeviceId() + ", IP " + saved.getIpAddress()

@@ -7,6 +7,8 @@ import java.time.Duration;
 
 @Service
 public class SessionRedisService {
+	
+	private static final String PREFIX = "session:";
 
     private final StringRedisTemplate redisTemplate;
 
@@ -20,7 +22,7 @@ public class SessionRedisService {
             String deviceId,
             Duration duration) {
 
-        String key = "session:" + token;
+        String key = PREFIX + token;
         String value = userId + ":" + deviceId;
 
         redisTemplate.opsForValue().set(
@@ -34,18 +36,22 @@ public class SessionRedisService {
 
         return redisTemplate
                 .opsForValue()
-                .get("session:" + token);
+                .get(PREFIX + token);
     }
 
     public void deleteSession(String token) {
 
-        redisTemplate.delete("session:" + token);
+        redisTemplate.delete(PREFIX + token);
     }
 
     public boolean sessionExists(String token) {
 
         return Boolean.TRUE.equals(
-                redisTemplate.hasKey("session:" + token)
+                redisTemplate.hasKey(PREFIX + token)
         );
+    }
+    
+    public Long getSessionTtlSeconds(String token) {
+    	return redisTemplate.getExpire(PREFIX + token);
     }
 }

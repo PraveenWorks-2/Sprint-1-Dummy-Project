@@ -2,6 +2,7 @@ package com.oneenterprise.securitysession.service;
 
 import com.oneenterprise.securitysession.dto.SessionRequest;
 import com.oneenterprise.securitysession.dto.SessionResponse;
+import com.oneenterprise.securitysession.dto.SessionValidationResponse;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface SessionService {
     List<SessionResponse> getUserSessions(Long userId);
 
     void terminateSession(Long id);
+    SessionValidationResponse validateSession(String token);
+    
 }
