@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-003\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-003\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -76,7 +76,7 @@
           "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
         },
         "url": {
-          "raw": "http://localhost:8087/api/devices/user/103",
+          "raw": "http://localhost:8087/api/devices/user/104",
           "protocol": "http",
           "host": [
             "localhost"
@@ -86,7 +86,7 @@
             "api",
             "devices",
             "user",
-            "103"
+            "104"
           ]
         }
       },
@@ -102,7 +102,7 @@
           "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
         },
         "url": {
-          "raw": "http://localhost:8087/api/devices/1",
+          "raw": "http://localhost:8087/api/devices/5",
           "protocol": "http",
           "host": [
             "localhost"
@@ -111,7 +111,7 @@
           "path": [
             "api",
             "devices",
-            "1"
+            "5"
           ]
         }
       },
@@ -124,7 +124,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"success\": true,\r\n    \"failureReason\": null\r\n}",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"success\": true,\r\n    \"failureReason\": null\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -217,7 +217,7 @@
           "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"loginStatus\": \"FAILED\",\r\n    \"failureReason\": \"Invalid password\"\r\n}"
         },
         "url": {
-          "raw": "http://localhost:8087/api/security/validate/103",
+          "raw": "http://localhost:8087/api/security/validate/104",
           "protocol": "http",
           "host": [
             "localhost"
@@ -227,7 +227,7 @@
             "api",
             "security",
             "validate",
-            "103"
+            "104"
           ]
         }
       },
@@ -240,7 +240,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}",
+          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-003\",\r\n    \"ipAddress\": \"192.168.1.21\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -275,7 +275,7 @@
           "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
         },
         "url": {
-          "raw": "http://localhost:8087/api/sessions/1",
+          "raw": "http://localhost:8087/api/sessions/15",
           "protocol": "http",
           "host": [
             "localhost"
@@ -284,7 +284,7 @@
           "path": [
             "api",
             "sessions",
-            "1"
+            "15"
           ]
         }
       },
@@ -296,7 +296,7 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:8087/api/sessions/1",
+          "raw": "http://localhost:8087/api/sessions/10",
           "protocol": "http",
           "host": [
             "localhost"
@@ -305,7 +305,7 @@
           "path": [
             "api",
             "sessions",
-            "1"
+            "10"
           ]
         }
       },
@@ -335,6 +335,145 @@
             "sessions",
             "user",
             "101"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "enable MFA",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8087/api/security/mfa/101/enable",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "security",
+            "mfa",
+            "101",
+            "enable"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create challenge",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\":104\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/security/mfa/challenge",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "security",
+            "mfa",
+            "challenge"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "validate MFA",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"challengeId\": \"edb8abc5-f3cf-4995-8aa5-839c0b5403e0\",\r\n    \"otp\": \"616808\",\r\n    \"userId\": 101\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/security/mfa/validate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "security",
+            "mfa",
+            "validate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Sso test",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 103,\r\n    \"provider\": \"DEMO-SSO\",\r\n    \"externalSubject\": \"user-103\",\r\n    \"providerValidated\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/security/sso/validate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "security",
+            "sso",
+            "validate"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "session validate",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8087/api/sessions/token/4168eef5-7def-4ce3-8bde-4ebf33488f91/validate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "sessions",
+            "token",
+            "4168eef5-7def-4ce3-8bde-4ebf33488f91",
+            "validate"
           ]
         }
       },
