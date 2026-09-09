@@ -1,271 +1,101 @@
-# OneEnterprise Tenant Management Service
+# OneEnterprise Tenant Management Service - Sprint 2
 
-**Developer:** Rayi Mohan  
-**Assigned branch:** `mohan-tenant-service`  
-**Microservice:** Tenant Management Service  
-**Repository:** https://github.com/PraveenWorks-2/Sprint-1-Dummy-Project.git
+**Developer:** Rayi Mohan
+**Branch:** `mohan-tenant-service`
+**Java:** 21
+**Spring Boot:** 3.5.6
+**Database:** PostgreSQL
+**Port:** 8083
 
-## Assignment scope from the provided PDF
-
-The PDF assigns Rayi Mohan the **Tenant Management Service** on branch `mohan-tenant-service`.
-
-Responsibilities:
-- Create Tenant
-- Tenant Profile
-- Tenant Status
-- Tenant Configuration
-- Tenant Update APIs
-
-Expected implementation:
-- Entity
-- DTO
-- Repository
-- Service
-- ServiceImpl
-- Controller
-- Validation
-- Exception handling
-- PostgreSQL integration
-- Postman testing
-
-## Important source-based note
-
-The PDF does not specify the exact tenant fields, endpoint paths, port, or database name. Those details are therefore implementation choices in this ZIP, designed to cover every assigned responsibility without changing the scope.
-
-## Endpoints implemented
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/tenants` | Create tenant |
-| GET | `/api/tenants` | Get all tenants |
-| GET | `/api/tenants/{id}` | Get tenant by ID |
-| PUT | `/api/tenants/{id}` | Update tenant |
-| DELETE | `/api/tenants/{id}` | Deactivate tenant (soft delete) |
-| GET | `/api/tenants/{id}/profile` | Get tenant profile |
-| PUT | `/api/tenants/{id}/profile` | Update tenant profile |
-| GET | `/api/tenants/{id}/status` | Get tenant status |
-| PATCH | `/api/tenants/{id}/status` | Update tenant status |
-| GET | `/api/tenants/{id}/configuration` | Get tenant configuration |
-| PUT | `/api/tenants/{id}/configuration` | Update tenant configuration |
-
-## Technology
-
-- Java 21
-- Spring Boot 3.5.6
-- Spring Web
-- Spring Data JPA / Hibernate
-- PostgreSQL
-- Bean Validation
-- Maven
-- JUnit 5 + Mockito
-- Postman
-
-## Project structure
-
-```text
-tenant-service/
-├── pom.xml
-├── README.md
-├── .gitignore
-├── postman/
-│   └── OneEnterprise-Tenant-Service.postman_collection.json
-└── src/
-    ├── main/
-    │   ├── java/com/oneenterprise/tenant/
-    │   │   ├── TenantServiceApplication.java
-    │   │   ├── controller/
-    │   │   ├── dto/
-    │   │   ├── entity/
-    │   │   ├── exception/
-    │   │   ├── repository/
-    │   │   ├── service/
-    │   │   └── serviceimpl/
-    │   └── resources/
-    │       ├── application.properties
-    │       └── application-local.properties
-    └── test/
-        └── java/com/oneenterprise/tenant/serviceimpl/
-            └── TenantServiceImplTest.java
-```
-
-## PostgreSQL setup
-
-Create the database:
-
-```sql
-CREATE DATABASE oneenterprise_tenant_db;
-```
-
-Default settings:
-
-```text
-Host: localhost
-Port: 5432
-Database: oneenterprise_tenant_db
-Username: postgres
-Password: postgres
-```
-
-If your PostgreSQL credentials differ, edit:
-
-`src/main/resources/application.properties`
-
-The service uses:
-
-```properties
-spring.jpa.hibernate.ddl-auto=update
-```
-
-Hibernate creates/updates only these service-owned tables:
-
-- `tenants`
-- `tenant_configurations`
-
-Do not change another developer's tables.
+## Sprint 2 scope completed
+This project extends the completed Tenant Management baseline without rebuilding it. It adds:
+- PostgreSQL tenant provisioning approach with configurable strategy.
+- Schema-per-tenant isolation by default.
+- Provisioning status and operational verification APIs.
+- Per-tenant backup request/retention metadata and PostgreSQL backup/restore scripts.
+- Advanced tenant configuration controls.
+- Strong tenant lifecycle/status transition validation.
+- Lifecycle-focused JUnit/Mockito tests.
+- Updated Postman collection and design documentation.
 
 ## Run in Eclipse
+1. Import the folder containing `pom.xml` as an **Existing Maven Project**.
+2. Ensure Java 21 is configured.
+3. Create PostgreSQL database `oneenterprise_tenant_db`.
+4. Set `DB_PASSWORD` if your local PostgreSQL password is not the default used by the sample configuration.
+5. Run `TenantServiceApplication`.
+6. Verify `GET http://localhost:8083/actuator/health`.
 
-1. Extract the ZIP.
-2. Eclipse -> File -> Import -> Existing Maven Projects.
-3. Select the extracted `tenant-service` folder.
-4. Wait for Maven dependencies.
-5. Confirm Java 21 is selected.
-6. Start PostgreSQL and create `oneenterprise_tenant_db`.
-7. Run `TenantServiceApplication.java` as **Java Application**.
-8. Verify: `http://localhost:8083/actuator/health`
+## Existing APIs
+- `POST /api/tenants`
+- `GET /api/tenants`
+- `GET /api/tenants/{id}`
+- `PUT /api/tenants/{id}`
+- `GET /api/tenants/{id}/profile`
+- `PUT /api/tenants/{id}/profile`
+- `GET /api/tenants/{id}/status`
+- `PATCH /api/tenants/{id}/status`
+- `GET /api/tenants/{id}/configuration`
+- `PUT /api/tenants/{id}/configuration`
+- `DELETE /api/tenants/{id}`
 
-Expected:
+## Sprint 2 APIs
+### Provisioning
+`POST /api/tenants/{id}/provisioning`
+`GET /api/tenants/{id}/provisioning`
 
+Default strategy: `SCHEMA_PER_TENANT`. A deterministic PostgreSQL schema is created for each tenant.
+
+### Isolation
+`GET /api/tenants/{id}/isolation`
+
+Returns the tenant's database/schema isolation contract.
+
+### Backup
+`POST /api/tenants/{id}/backups`
+`GET /api/tenants/{id}/backups`
+
+The API records a backup request and retention metadata. Actual production dump execution is externalized to PostgreSQL backup automation. See `db/backup`.
+
+## Advanced configuration example
 ```json
-{"status":"UP"}
+{
+  "currency": "INR",
+  "dateFormat": "dd-MM-yyyy",
+  "emailEnabled": true,
+  "notificationsEnabled": true,
+  "selfServiceEnabled": true,
+  "maxUsers": 500,
+  "dataRetentionDays": 730,
+  "maxStorageMb": 20480,
+  "sessionTimeoutMinutes": 60,
+  "auditEnabled": true,
+  "backupEnabled": true,
+  "backupRetentionDays": 90,
+  "passwordMinLength": 14,
+  "defaultRole": "USER"
+}
 ```
 
-## Maven test/build
+## Status lifecycle
+Allowed transitions:
+- `PENDING -> ACTIVE | INACTIVE`
+- `ACTIVE -> SUSPENDED | INACTIVE`
+- `SUSPENDED -> ACTIVE | INACTIVE`
+- `INACTIVE -> terminal`
 
-From the project root:
+Same-status and invalid transitions return HTTP 400.
 
-```bash
-mvn clean test
-mvn clean package
-mvn spring-boot:run
-```
+## Backup strategy
+For production, use encrypted, off-host PostgreSQL custom-format dumps with retention according to tenant configuration. Scripts:
+- `db/backup/backup.sh`
+- `db/backup/restore.sh`
+- `db/backup/backup.ps1`
 
-The included JUnit/Mockito test does not require PostgreSQL.
+Never commit real database passwords.
 
-## End-to-end Postman test
+## Tests
+The test suite covers tenant creation, default configuration/provisioning invocation, duplicate tenant codes, valid lifecycle transitions, invalid lifecycle transitions, terminal inactive state, missing tenants, and advanced configuration.
 
-Import:
-
-`postman/OneEnterprise-Tenant-Service.postman_collection.json`
-
-Run the requests in order:
-
-1. Create Tenant
-2. Get All Tenants
-3. Get Tenant By ID
-4. Get Tenant Profile
-5. Update Tenant Profile
-6. Get Tenant Status
-7. Update Tenant Status
-8. Get Tenant Configuration
-9. Update Tenant Configuration
-10. Update Tenant
-11. Deactivate Tenant
-12. Get Tenant After Deactivation
-13. Validation Check
-
-The Create request automatically stores the returned UUID in the collection variable `tenantId`.
-
-Expected results:
-- Create: `201 Created`, status `PENDING`
-- Update status: `200 OK`, status `ACTIVE`
-- Deactivate: `204 No Content`, tenant remains with status `INACTIVE`
-- Validation: `400 Bad Request`
-- Unknown UUID: `404 Not Found`
-
-## Git and Pull Request workflow
-
-The PDF requires:
-
-1. Clone the common repository.
-2. Checkout the assigned branch.
-3. Pull latest changes before starting.
-4. Work only on the assigned microservice.
-5. Commit with a clear message.
-6. Push to the assigned branch.
-7. Create a Pull Request.
-8. Merge only after approval.
-
-Commands:
-
-```bash
-git clone https://github.com/PraveenWorks-2/Sprint-1-Dummy-Project.git
-cd Sprint-1-Dummy-Project
-
-git fetch origin
-git checkout mohan-tenant-service
-git pull origin mohan-tenant-service
-```
-
-If the branch does not exist locally but exists on GitHub:
-
-```bash
-git fetch origin
-git checkout -b mohan-tenant-service origin/mohan-tenant-service
-```
-
-Copy this `tenant-service` folder into the common repository at the location agreed by the team.
-
-Then:
-
-```bash
-git status
-git add tenant-service
-git commit -m "feat: implement tenant management service"
-git push -u origin mohan-tenant-service
-```
-
-On GitHub create a Pull Request:
-
-- **base:** your team's agreed common integration branch
-- **compare:** `mohan-tenant-service`
-- **title:** `feat: Tenant Management Service`
-
-Suggested PR summary:
-
-```text
-Implemented Tenant Management Service for the OneEnterprise sprint.
-
-- Create and retrieve tenants
-- Tenant profile APIs
-- Tenant status APIs
-- Tenant configuration APIs
-- Tenant update/deactivation
-- Validation and global exception handling
-- PostgreSQL/JPA persistence
-- JUnit/Mockito service test
-- Postman end-to-end collection
-```
-
-Do not directly merge into the common branch unless your team/maintainer approves the PR.
-
-## Integration coordination
-
-Page 4 of the PDF says developers must coordinate API contracts, IDs, event names and integration requirements. This implementation uses UUID tenant IDs.
-
-Before the PR is merged, confirm with the Role/Permission developers that:
-- they use the same tenant ID format
-- their tenant-related API contracts match
-- no other developer is changing the Tenant Service tables
-
-The PDF's common service flow starts with:
-
-`Tenant Service -> Role Service -> Permission Service -> Role-Permission Service -> User-Role Service -> Security & Session Service -> Audit & Activity Service -> Notification Service`
-
-## Redis and Kafka
-
-The PDF assigns Redis mainly to Security & Session Service and Kafka processing mainly to Audit & Activity and Notification services. Therefore this Tenant Service intentionally does not add Redis/Kafka implementation unless the team later defines a shared contract requiring it.
-
-## Authentication
-
-The PDF assigns security/session responsibilities to the Security & Session Service. This Tenant Service therefore does not invent a JWT/security implementation that was not assigned in the source document.
+## Documentation
+See `docs/SPRINT2_TENANT_DESIGN.md` for the provisioning, isolation, backup and lifecycle design.
