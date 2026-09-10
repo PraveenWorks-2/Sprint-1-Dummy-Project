@@ -1,23 +1,15 @@
-version: "3.8"
-
 services:
   postgres:
-    image: postgres:16
-    container_name: team2-organization-postgres
-    restart: unless-stopped
+    image: postgres:17
+    container_name: user-role-postgres
     environment:
-      POSTGRES_DB: dummyproject_team2
+      POSTGRES_DB: user_role_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 7675093749
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
-      - team2_pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - user_role_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  team2_pgdata:
+  user_role_postgres_data:
