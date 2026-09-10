@@ -16,4 +16,5 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Role> findByTenantId(String tenantId);
     List<Role> findByTenantIdAndIsActiveTrue(String tenantId);
     List<Role> findByTenantIdAndIsCustom(String tenantId, Boolean isCustom);
+    boolean existsByRoleNameIgnoreCaseAndTenantId(String roleName, String tenantId);
 }

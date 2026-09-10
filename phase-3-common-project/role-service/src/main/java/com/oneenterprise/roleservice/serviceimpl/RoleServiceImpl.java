@@ -17,6 +17,7 @@ import com.oneenterprise.roleservice.dto.RoleUpdateDto;
 import com.oneenterprise.roleservice.entity.Role;
 import com.oneenterprise.roleservice.exception.RoleAlreadyExistsException;
 import com.oneenterprise.roleservice.exception.RoleNotFoundException;
+import com.oneenterprise.roleservice.exception.SystemRoleImmutableException;
 import com.oneenterprise.roleservice.exception.TenantNotFoundException;
 import com.oneenterprise.roleservice.producer.RoleEventProducer;
 import com.oneenterprise.roleservice.repository.RoleRepository;
@@ -31,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
 
     public RoleServiceImpl(RoleRepository roleRepository,
                            RoleEventProducer roleEventProducer,
-                           @Value("${tenant-service.url:http://localhost:8084}") String tenantServiceUrl) {
+                           @Value("${tenant-service.url:http://localhost:8083}") String tenantServiceUrl) {
         this.roleRepository = roleRepository;
         this.roleEventProducer = roleEventProducer;
         this.restClient = RestClient.builder().baseUrl(tenantServiceUrl).build();
@@ -43,7 +44,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponseDto createRole(RoleRequestDto requestDto) {
         validateTenant(requestDto.getTenantId());
 
-        if (roleRepository.existsByRoleNameAndTenantId(requestDto.getRoleName(), requestDto.getTenantId())) {
+        if (roleRepository.existsByRoleNameIgnoreCaseAndTenantId(requestDto.getRoleName(), requestDto.getTenantId())) {
             throw new RoleAlreadyExistsException("Role '" + requestDto.getRoleName() + "' already exists for tenant: " + requestDto.getTenantId());
         }
 
@@ -95,7 +96,11 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponseDto updateRole(Long id, RoleUpdateDto updateDto) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException("Role not found with ID: " + id));
-
+        
+        if (Boolean.FALSE.equals(role.getIsCustom())) {
+            throw new SystemRoleImmutableException("System-defined role '" + role.getRoleName() + "' cannot be modified.");
+        }
+        
         if (updateDto.getRoleName() != null && !updateDto.getRoleName().isBlank()) {
             String updatedName = updateDto.getRoleName().trim().toUpperCase();
             if (!role.getRoleName().equalsIgnoreCase(updatedName) &&
@@ -125,12 +130,18 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     @CacheEvict(value = {"roles", "roles_tenant"}, allEntries = true)
     public void deactivateRole(Long id) {
-        Role role = roleRepository.findById(id)
+        Role existingRole = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException("Role not found with ID: " + id));
-        role.setIsActive(false);
-        roleRepository.save(role);
 
-        roleEventProducer.publishEvent("ROLE_DEACTIVATED", role.getId(), role.getRoleName(), role.getTenantId());
+        if (Boolean.FALSE.equals(existingRole.getIsCustom())) {
+            throw new SystemRoleImmutableException("System-defined role '" + existingRole.getRoleName() + "' cannot be deactivated.");
+        }
+
+        existingRole.setIsActive(false);
+        Role savedRole = roleRepository.save(existingRole);
+
+        // Kafka Event
+        roleEventProducer.publishEvent("ROLE_DEACTIVATED", savedRole.getId(), savedRole.getRoleName(), savedRole.getTenantId());
     }
 
     @Override
@@ -139,15 +150,21 @@ public class RoleServiceImpl implements RoleService {
     public void deleteRole(Long id) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException("Role not found with ID: " + id));
+
+        if (Boolean.FALSE.equals(role.getIsCustom())) {
+            throw new SystemRoleImmutableException("System-defined role '" + role.getRoleName() + "' cannot be deleted.");
+        }
+
         roleRepository.delete(role);
 
+        // Kafka Event
         roleEventProducer.publishEvent("ROLE_DELETED", role.getId(), role.getRoleName(), role.getTenantId());
     }
 
     private void validateTenant(String tenantId) {
         try {
             restClient.get()
-                    .uri("/api/v1/tenants/{id}", tenantId)
+                    .uri("/api/tenants/{id}", tenantId)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                         throw new TenantNotFoundException("Tenant not found with ID: " + tenantId);
