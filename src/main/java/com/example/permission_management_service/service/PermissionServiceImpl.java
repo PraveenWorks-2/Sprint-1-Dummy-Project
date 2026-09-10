@@ -51,6 +51,7 @@ public class PermissionServiceImpl implements PermissionService {
         permission.setCategory(request.getCategory());
         permission.setModule(request.getModule());
         permission.setDescription(request.getDescription());
+        permission.setPermissionType(request.getPermissionType());
         permission.setActive(true);
 
         return PermissionResponse.from(repository.save(permission));
@@ -77,6 +78,7 @@ public class PermissionServiceImpl implements PermissionService {
         permission.setDescription(request.getDescription());
         permission.setCategory(request.getCategory().trim().toUpperCase());
         permission.setModule(request.getModule().trim());
+        permission.setPermissionType(request.getPermissionType());
 
         if (request.getActive() != null) {
             permission.setActive(request.getActive());

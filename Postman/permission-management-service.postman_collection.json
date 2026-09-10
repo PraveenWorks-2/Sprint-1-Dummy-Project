@@ -1,0 +1,605 @@
+{
+  "info": {
+    "_postman_id": "168e38d0-373e-4b22-8178-51804032263c",
+    "name": "permission-management-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57410264",
+    "_collection_link": "https://go.postman.co/collection/57410264-168e38d0-373e-4b22-8178-51804032263c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "permission service api",
+      "item": [
+        {
+          "name": "create permission",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Salary Read\",\r\n  \"code\": \"salary_read\",\r\n  \"description\": \"View employee salary information\",\r\n  \"category\": \"PAYROLL\",\r\n  \"module\": \"FINANCE\",\r\n  \"permissionType\": \"DATA\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permissions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "all permission",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Salary Read\",\r\n  \"code\": \"salary_read\",\r\n  \"description\": \"View employee salary information\",\r\n  \"category\": \"PAYROLL\",\r\n  \"module\": \"FINANCE\",\r\n  \"permissionType\": \"DATA\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permissions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single permission",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Salary Read\",\r\n  \"code\": \"salary_read\",\r\n  \"description\": \"View employee salary information\",\r\n  \"category\": \"PAYROLL\",\r\n  \"module\": \"FINANCE\",\r\n  \"permissionType\": \"DATA\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permissions/14",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions",
+                "14"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "upadate permission",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Employee Read Access\",\r\n  \"code\": \"employee_read\",\r\n  \"description\": \"Read employee details\",\r\n  \"category\": \"EMPLOYEE\",\r\n  \"module\": \"HR\",\r\n  \"permissionType\": \"DEPARTMENT\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permissions/13",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete permission",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Employee Read Access\",\r\n  \"code\": \"employee_read\",\r\n  \"description\": \"Read employee details\",\r\n  \"category\": \"EMPLOYEE\",\r\n  \"module\": \"HR\",\r\n  \"permissionType\": \"DEPARTMENT\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permissions/15",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch deactivate",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Employee Read Access\",\r\n  \"code\": \"employee_read\",\r\n  \"description\": \"Read employee details\",\r\n  \"category\": \"EMPLOYEE\",\r\n  \"module\": \"HR\",\r\n  \"permissionType\": \"DEPARTMENT\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permissions/13/deactivate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions",
+                "13",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/permissions/category/EMPLOYEE",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions",
+                "category",
+                "EMPLOYEE"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get module",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/permissions/module/HR",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permissions",
+                "module",
+                "HR"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Department service api",
+      "item": [
+        {
+          "name": "create",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"departmentId\": 5,\r\n  \"permissionId\": 16,\r\n  \"allowed\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/department-permissions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "department-permissions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single department service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/department-permissions/department/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "department-permissions",
+                "department",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "department activate",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/department-permissions/department/6/active",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "department-permissions",
+                "department",
+                "6",
+                "active"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get permission code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/department-permissions/department/1/check/EMPLOYEE_READ",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "department-permissions",
+                "department",
+                "1",
+                "check",
+                "EMPLOYEE_READ"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/department-permissions/department/5/permission/16",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "department-permissions",
+                "department",
+                "5",
+                "permission",
+                "16"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "data permission api",
+      "item": [
+        {
+          "name": "create permission",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"permissionId\": 16,\r\n  \"dataScope\": \"OWN\",\r\n  \"filterExpression\": \"created_by = CURRENT_USER\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/data-permissions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "data-permissions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/data-permissions/permission/13",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "data-permissions",
+                "permission",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get datascope",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/data-permissions/scope/OWN",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "data-permissions",
+                "scope",
+                "OWN"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get permission active",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/data-permissions/active",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "data-permissions",
+                "active"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "permission matrix",
+      "item": [
+        {
+          "name": "create permission",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"roleName\": \"MANAGER\",\r\n  \"permissionId\": 16,\r\n  \"allowed\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/permission-matrix",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permission-matrix"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get role name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/permission-matrix/role/ADMIN",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permission-matrix",
+                "role",
+                "ADMIN"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "role name active",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/permission-matrix/role/ADMIN/active",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permission-matrix",
+                "role",
+                "ADMIN",
+                "active"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get role name and permission code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/permission-matrix/role/ADMIN/check/EMPLOYEE_READ",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permission-matrix",
+                "role",
+                "ADMIN",
+                "check",
+                "EMPLOYEE_READ"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/permission-matrix/role/MANAGER/permission/16",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "permission-matrix",
+                "role",
+                "MANAGER",
+                "permission",
+                "16"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
