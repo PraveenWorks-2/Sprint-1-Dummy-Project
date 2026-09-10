@@ -1,18 +1,20 @@
 package com.oneenterprise.dummyproject.user.service;
 
+import com.oneenterprise.dummyproject.user.dto.UserProfileUpdateDto;
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationRequestDto;
 import com.oneenterprise.dummyproject.user.dto.UserRegistrationResponseDto;
-import com.oneenterprise.dummyproject.user.entity.User;
+
+import java.util.UUID;
 
 public interface UserService {
 
     UserRegistrationResponseDto registerUser(UserRegistrationRequestDto requestDto);
 
-    UserRegistrationResponseDto getUserById(Long id);
+    UserRegistrationResponseDto getUserById(UUID id);
 
-    UserRegistrationResponseDto activateUser(Long id);
+    UserRegistrationResponseDto updateProfile(UUID id, UserProfileUpdateDto requestDto);
 
-    UserRegistrationResponseDto deactivateUser(Long id);
+    UserRegistrationResponseDto activateUser(UUID id);
 
-
+    UserRegistrationResponseDto deactivateUser(UUID id);
 }
