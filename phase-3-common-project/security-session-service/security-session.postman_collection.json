@@ -1,0 +1,344 @@
+{
+  "info": {
+    "_postman_id": "00bd10ab-3523-46ee-965d-847691e1649d",
+    "name": "security session",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39881112"
+  },
+  "item": [
+    {
+      "name": "register device",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-003\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/devices",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "devices"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get devices by id",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/devices/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "devices",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all devices for a user",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/devices/user/103",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "devices",
+            "user",
+            "103"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deactivate device",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"deviceName\": \"Andriod Phone\",\r\n    \"deviceType\": \"Mobile\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/devices/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "devices",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "record successful login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"success\": true,\r\n    \"failureReason\": null\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/login-history",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "login-history"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get login history",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"loginStatus\": \"FAILED\",\r\n    \"failureReason\": \"Invalid password\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/login-history/user/103",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "login-history",
+            "user",
+            "103"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "account security validation",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"loginStatus\": \"FAILED\",\r\n    \"failureReason\": \"Invalid password\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/security/validate/101",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "security",
+            "validate",
+            "101"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "account security validation",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\",\r\n    \"loginStatus\": \"FAILED\",\r\n    \"failureReason\": \"Invalid password\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/security/validate/103",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "security",
+            "validate",
+            "103"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create sessions",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 104,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/sessions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "sessions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get session by id",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/sessions/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "sessions",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "terminated session",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8087/api/sessions/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "sessions",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all active sessions for user",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 101,\r\n    \"deviceId\": \"DEVICE-002\",\r\n    \"ipAddress\": \"192.168.1.20\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8087/api/sessions/user/101",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8087",
+          "path": [
+            "api",
+            "sessions",
+            "user",
+            "101"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

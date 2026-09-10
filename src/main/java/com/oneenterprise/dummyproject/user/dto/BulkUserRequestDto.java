@@ -2,7 +2,10 @@ package com.oneenterprise.dummyproject.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 public class BulkUserRequestDto {
@@ -17,6 +20,9 @@ public class BulkUserRequestDto {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank(message = "Phone number is required")
-    private String phone;
+    @NotNull(message = "Tenant ID is required")
+    private UUID tenantId;
+
+    @NotNull(message = "Department ID is required")
+    private UUID departmentId;
 }
