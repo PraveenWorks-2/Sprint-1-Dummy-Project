@@ -5,8 +5,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "permission-service", url = "${permission-service.url}")
-
+@FeignClient(
+        name = "permission-service",
+        url = "${permission-service.url}",
+        configuration = com.oneenterprise.dummyproject.role_permission.config.FeignClientConfig.class
+)
 public interface PermissionClient {
 
     @GetMapping("/api/permissions/{id}")
