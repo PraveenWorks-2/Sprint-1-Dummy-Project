@@ -1,8 +1,13 @@
 package com.oneenterprise.userrole.entity;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
-
 @Entity
 @Table(
     name = "user_roles",
@@ -13,47 +18,63 @@ import java.time.LocalDateTime;
         )
     },
     indexes = {
-        @Index(name = "idx_user_id", columnList = "user_id"),
-        @Index(name = "idx_role_id", columnList = "role_id")
+        @Index(
+            name = "idx_user_id",
+            columnList = "user_id"
+        ),
+        @Index(
+            name = "idx_role_id",
+            columnList = "role_id"
+        ),
+        @Index(
+            name = "idx_user_role_status",
+            columnList = "user_id, role_id, status"
+        )
     }
 )
 public class UserRole {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(
+        name = "user_id",
+        nullable = false
+    )
     private Long userId;
-
-    @Column(name = "role_id", nullable = false)
+    @Column(
+        name = "role_id",
+        nullable = false
+    )
     private Long roleId;
-
-    @Column(name = "assigned_at", nullable = false)
+    @Column(
+        name = "assigned_at",
+        nullable = false
+    )
     private LocalDateTime assignedAt;
-
-    @Column(name = "status", nullable = false)
+    @Column(
+        name = "status",
+        nullable = false,
+        length = 20
+    )
     private String status;
-
-    // Default Constructor
     public UserRole() {
     }
+    public UserRole(
+            Long userId,
+            Long roleId,
+            LocalDateTime assignedAt,
+            String status) {
 
-    // Parameterized Constructor
-    public UserRole(Long userId, Long roleId,
-                    LocalDateTime assignedAt, String status) {
         this.userId = userId;
         this.roleId = roleId;
         this.assignedAt = assignedAt;
         this.status = status;
     }
 
-    // Getters and Setters
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -61,7 +82,6 @@ public class UserRole {
     public Long getUserId() {
         return userId;
     }
-
     public void setUserId(Long userId) {
         this.userId = userId;
     }

@@ -1,105 +1,120 @@
-
-
 package com.oneenterprise.userrole.serviceimpl;
-
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
 import com.oneenterprise.userrole.dto.UserRoleRequest;
 import com.oneenterprise.userrole.dto.UserRoleResponse;
 import com.oneenterprise.userrole.entity.UserRole;
+import com.oneenterprise.userrole.exception.DuplicateUserRoleException;
+import com.oneenterprise.userrole.exception.ResourceNotFoundException;
+import com.oneenterprise.userrole.kafka.KafkaProducerService;
 import com.oneenterprise.userrole.repository.UserRoleRepository;
 import com.oneenterprise.userrole.service.UserRoleService;
-
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
-
-    private final UserRoleRepository userRoleRepository;
-
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository) {
-        this.userRoleRepository = userRoleRepository;
+    private final UserRoleRepository repository;
+    private final KafkaProducerService kafkaProducer;
+    private final RedisTemplate<String, Object> redisTemplate;
+    public UserRoleServiceImpl(
+            UserRoleRepository repository,
+            KafkaProducerService kafkaProducer,
+            RedisTemplate<String, Object> redisTemplate) {
+        this.repository = repository;
+        this.kafkaProducer = kafkaProducer;
+        this.redisTemplate = redisTemplate;
     }
-
-    // 1. Assign Role to User
+    // Assign Role to User
     @Override
     public UserRoleResponse assignRoleToUser(UserRoleRequest request) {
+        // Duplicate Validation
+        if (repository.existsByUserIdAndRoleId(
+                request.getUserId(),
+                request.getRoleId())) {
 
+            throw new DuplicateUserRoleException(
+                    "Role already assigned to this user");
+        }
         UserRole userRole = new UserRole();
-
         userRole.setUserId(request.getUserId());
         userRole.setRoleId(request.getRoleId());
-
-        // Set default values
         userRole.setAssignedAt(LocalDateTime.now());
         userRole.setStatus("ACTIVE");
-
-        UserRole savedUserRole = userRoleRepository.save(userRole);
-
-        return convertToResponse(savedUserRole);
+        UserRole saved = repository.save(userRole);
+        // Kafka Event
+        kafkaProducer.sendRoleAssignedEvent(
+                saved.getUserId(),
+                saved.getRoleId());
+        // Clear Redis Cache
+        redisTemplate.delete("access:" + saved.getUserId());
+        return convert(saved);
     }
-
-    // 2. Get User Role by ID
-    @Override
-    public UserRoleResponse getUserRoleById(Long id) {
-
-        UserRole userRole = userRoleRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User role not found with id: " + id));
-
-        return convertToResponse(userRole);
-    }
-
-    // 3. Get All Roles for a User
-    @Override
-    public List<UserRoleResponse> getUserRoles(Long userId) {
-
-        List<UserRole> userRoles =
-                userRoleRepository.findByUserId(userId);
-
-        return userRoles.stream()
-                .map(this::convertToResponse)
-                .toList();
-    }
-
-    // 4. Remove User Role
+    // Remove User Role
     @Override
     public void removeUserRole(Long id) {
 
-        if (!userRoleRepository.existsById(id)) {
-            throw new RuntimeException(
-                    "User role not found with id: " + id);
-        }
+        UserRole userRole = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User role not found with id: " + id));
+        repository.delete(userRole);
+        kafkaProducer.sendRoleRemovedEvent(
+                userRole.getUserId(),
+                userRole.getRoleId());
 
-        userRoleRepository.deleteById(id);
+        redisTemplate.delete("access:" + userRole.getUserId());
     }
-
-    // 5. Get User Access Mapping
+    // Get Mapping by ID
     @Override
-    public List<UserRoleResponse> getUserAccessMapping(Long userId) {
-
-        List<UserRole> userRoles =
-                userRoleRepository.findByUserId(userId);
-
-        return userRoles.stream()
-                .map(this::convertToResponse)
+    public UserRoleResponse getUserRoleById(Long id) {
+        UserRole userRole = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User role not found with id: " + id));
+        return convert(userRole);
+    }
+    // Get Roles for User
+    @Override
+    public List<UserRoleResponse> getUserRoles(Long userId) {
+        return repository.findByUserId(userId)
+                .stream()
+                .map(this::convert)
                 .toList();
     }
-
-    // Convert Entity to Response DTO
-    private UserRoleResponse convertToResponse(UserRole userRole) {
-
+    // Get Access Mapping
+    @Override
+    public List<UserRoleResponse> getUserAccessMapping(Long userId) {
+        String key = "access:" + userId;
+        Object cached = redisTemplate.opsForValue().get(key);
+        if (cached != null) {
+            return (List<UserRoleResponse>) cached;
+        }
+        List<UserRoleResponse> access = repository
+                .findByUserIdAndStatus(userId, "ACTIVE")
+                .stream()
+                .map(this::convert)
+                .toList();
+        redisTemplate.opsForValue()
+                .set(key, access, Duration.ofMinutes(10));
+        return access;
+    }
+    // Authorization Lookup
+    @Override
+    public boolean hasRole(Long userId, Long roleId) {
+        return repository.existsByUserIdAndRoleIdAndStatus(
+                userId,
+                roleId,
+                "ACTIVE");
+    }
+    // Convert Entity to DTO
+    private UserRoleResponse convert(UserRole userRole) {
         UserRoleResponse response = new UserRoleResponse();
-
         response.setId(userRole.getId());
         response.setUserId(userRole.getUserId());
         response.setRoleId(userRole.getRoleId());
         response.setAssignedAt(userRole.getAssignedAt());
         response.setStatus(userRole.getStatus());
-
         return response;
     }
 }
-
