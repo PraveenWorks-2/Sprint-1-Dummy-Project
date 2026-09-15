@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"roleName\": \"ROLE_MANAGER\",\r\n  \"description\": \"Manager with branch permissions\",\r\n  \"tenantId\": \"TENANT-101\",\r\n  \"isCustom\": false\r\n}",
+          "raw": "{\r\n  \"roleName\": \"ROLE_SYSTEM_ADMIN\",\r\n  \"description\": \"System root administrator\",\r\n  \"tenantId\": \"0558102e-cafe-40d5-83dc-6b539d3ca31b\",\r\n  \"isCustom\": false\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -42,12 +42,12 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/v1/roles?tenantId=TENANT-101&activeOnly=true",
+          "raw": "http://localhost:8081/api/v1/roles?tenantId=TENANT-101&activeOnly=true",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8080",
+          "port": "8081",
           "path": [
             "api",
             "v1",
@@ -73,17 +73,17 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/v1/roles/2",
+          "raw": "http://localhost:8081/api/v1/roles/1",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8080",
+          "port": "8081",
           "path": [
             "api",
             "v1",
             "roles",
-            "2"
+            "1"
           ]
         }
       },
@@ -162,6 +162,14 @@
             "1"
           ]
         }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
       },
       "response": []
     }
