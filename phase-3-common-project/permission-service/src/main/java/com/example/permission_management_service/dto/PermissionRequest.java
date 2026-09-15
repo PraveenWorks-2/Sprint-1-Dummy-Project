@@ -1,83 +1,98 @@
 package com.example.permission_management_service.dto;
 
+import com.example.permission_management_service.entity.PermissionType;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class PermissionRequest{
-        @NotBlank(message = "Permission name is required")
-        @Size(max = 100, message = "Permission name must not exceed 100 characters")
-        private String name;
+public class PermissionRequest {
 
-        public String getName() {
-			return name;
-		}
+    @NotBlank(message = "Permission name is required")
+    @Size(max = 100)
+    private String name;
 
-		public void setName(String name) {
-			this.name = name;
-		}
+    @NotBlank(message = "Permission code is required")
+    @Size(max = 100)
+    private String code;
 
-		public String getCode() {
-			return code;
-		}
+    @Size(max = 500)
+    private String description;
 
-		public void setCode(String code) {
-			this.code = code;
-		}
+    @NotBlank(message = "Permission category is required")
+    @Size(max = 50)
+    private String category;
 
-		public String getDescription() {
-			return description;
-		}
+    @NotBlank(message = "Module is required")
+    @Size(max = 100)
+    private String module;
 
-		public void setDescription(String description) {
-			this.description = description;
-		}
+    @NotNull(message = "Permission type is required")
+    private PermissionType permissionType;
 
-		public String getCategory() {
-			return category;
-		}
+    public PermissionRequest() {
+    }
 
-		public void setCategory(String category) {
-			this.category = category;
-		}
+    public String getName() {
+        return name;
+    }
 
-		public String getModule() {
-			return module;
-		}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-		public void setModule(String module) {
-			this.module = module;
-		}
+    public String getCode() {
+        return code;
+    }
 
-		public PermissionRequest() {
-			super();
-			// TODO Auto-generated constructor stub
-		}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-		public PermissionRequest(
-				@NotBlank(message = "Permission name is required") @Size(max = 100, message = "Permission name must not exceed 100 characters") String name,
-				@NotBlank(message = "Permission code is required") @Size(max = 100, message = "Permission code must not exceed 100 characters") String code,
-				@Size(max = 500, message = "Description must not exceed 500 characters") String description,
-				@NotBlank(message = "Permission category is required") @Size(max = 50, message = "Category must not exceed 50 characters") String category,
-				@NotBlank(message = "Module is required") @Size(max = 100, message = "Module must not exceed 100 characters") String module) {
-			this.name = name;
-			this.code = code;
-			this.description = description;
-			this.category = category;
-			this.module = module;
-		}
+    public String getDescription() {
+        return description;
+    }
 
-		@NotBlank(message = "Permission code is required")
-        @Size(max = 100, message = "Permission code must not exceed 100 characters")
-        private String code;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        @Size(max = 500, message = "Description must not exceed 500 characters")
-        String description;
+    public String getCategory() {
+        return category;
+    }
 
-        @NotBlank(message = "Permission category is required")
-        @Size(max = 50, message = "Category must not exceed 50 characters")
-        private String category;
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-        @NotBlank(message = "Module is required")
-        @Size(max = 100, message = "Module must not exceed 100 characters")
-        private String module;
+    public String getModule() {
+        return module;
+    }
+
+    public PermissionRequest(@NotBlank(message = "Permission name is required") @Size(max = 100) String name,
+			@NotBlank(message = "Permission code is required") @Size(max = 100) String code,
+			@Size(max = 500) String description,
+			@NotBlank(message = "Permission category is required") @Size(max = 50) String category,
+			@NotBlank(message = "Module is required") @Size(max = 100) String module,
+			@NotNull(message = "Permission type is required") PermissionType permissionType) {
+		super();
+		this.name = name;
+		this.code = code;
+		this.description = description;
+		this.category = category;
+		this.module = module;
+		this.permissionType = permissionType;
+	}
+
+	public void setModule(String module) {
+        this.module = module;
+    }
+
+    public PermissionType getPermissionType() {
+        return permissionType;
+    }
+
+    public void setPermissionType(PermissionType permissionType) {
+        this.permissionType = permissionType;
+    }
 }

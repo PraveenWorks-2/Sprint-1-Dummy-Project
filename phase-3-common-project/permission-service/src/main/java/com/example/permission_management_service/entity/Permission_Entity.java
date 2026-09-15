@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,19 +16,86 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "permissions",
-uniqueConstraints = @UniqueConstraint(name = "uk_permission_code", columnNames = "code"),
-indexes = {
-    @Index(name = "idx_permission_category", columnList = "category"),
-    @Index(name = "idx_permission_module", columnList = "module")
-})
+@Table(
+    name = "permissions",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_permission_code",
+            columnNames = "code"
+        )
+    },
+    indexes = {
+        @Index(
+            name = "idx_permission_category",
+            columnList = "category"
+        ),
+        @Index(
+            name = "idx_permission_module",
+            columnList = "module"
+        ),
+        @Index(
+            name = "idx_permission_type",
+            columnList = "permission_type"
+        )
+    }
+)
 public class Permission_Entity {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Long getId() {
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String code;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(nullable = false, length = 50)
+    private String category;
+
+    @Column(nullable = false, length = 100)
+    private String module;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "permission_type", nullable = false, length = 30)
+    private PermissionType permissionType = PermissionType.FUNCTIONAL;
+
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        createdAt = now;
+        updatedAt = now;
+
+        if (active == null) {
+            active = true;
+        }
+
+        if (permissionType == null) {
+            permissionType = PermissionType.FUNCTIONAL;
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+	public Long getId() {
 		return id;
 	}
 
@@ -74,6 +143,14 @@ public class Permission_Entity {
 		this.module = module;
 	}
 
+	public PermissionType getPermissionType() {
+		return permissionType;
+	}
+
+	public void setPermissionType(PermissionType permissionType) {
+		this.permissionType = permissionType;
+	}
+
 	public Boolean getActive() {
 		return active;
 	}
@@ -104,7 +181,7 @@ public class Permission_Entity {
 	}
 
 	public Permission_Entity(Long id, String name, String code, String description, String category, String module,
-			Boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
+			PermissionType permissionType, Boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -112,50 +189,9 @@ public class Permission_Entity {
 		this.description = description;
 		this.category = category;
 		this.module = module;
+		this.permissionType = permissionType;
 		this.active = active;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-	}
-
-	@Column(nullable = false, length = 100)
-    private String name;
-
-    @Column(nullable = false, unique = true, length = 100)
-    private String code;
-
-    @Column(length = 500)
-    private String description;
-
-    @Column(nullable = false, length = 50)
-    private String category;
-
-    @Column(nullable = false, length = 100)
-    private String module;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    void onCreate() {
-        LocalDateTime now = LocalDateTime.now();
-        createdAt = now;
-        updatedAt = now;
-        if (active == null) active = true;
-    }
-
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-	public static Object builder() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

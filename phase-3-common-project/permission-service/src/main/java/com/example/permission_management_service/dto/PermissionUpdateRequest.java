@@ -1,5 +1,7 @@
 package com.example.permission_management_service.dto;
 
+import com.example.permission_management_service.entity.PermissionType;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -7,8 +9,23 @@ public class PermissionUpdateRequest{
         @NotBlank(message = "Permission name is required")
         @Size(max = 100, message = "Permission name must not exceed 100 characters")
         private String name;
+        
+        private  PermissionType permissionType;
 
-        public String getName() {
+        public PermissionUpdateRequest(PermissionType permissionType) {
+			super();
+			this.permissionType = permissionType;
+		}
+
+		public PermissionType getPermissionType() {
+			return permissionType;
+		}
+
+		public void setPermissionType(PermissionType permissionType) {
+			this.permissionType = permissionType;
+		}
+
+		public String getName() {
 			return name;
 		}
 
@@ -79,6 +96,5 @@ public class PermissionUpdateRequest{
         private String module;
 
         private Boolean active;
-
 		
         }
