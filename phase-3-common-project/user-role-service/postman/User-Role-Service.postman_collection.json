@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "User-Role Service",
+    "_postman_id": "user-role-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "userId",
+      "value": "1"
+    },
+    {
+      "key": "roleId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Assign Role to User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 1,\n  \"roleId\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/user-roles"
+      }
+    },
+    {
+      "name": "Remove User Role",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/user-roles/{{userId}}/{{roleId}}"
+      }
+    },
+    {
+      "name": "Get User Roles",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/user-roles/user/{{userId}}"
+      }
+    },
+    {
+      "name": "Get User Access Mapping",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/user-roles/user/{{userId}}/access"
+      }
+    }
+  ]
+}
