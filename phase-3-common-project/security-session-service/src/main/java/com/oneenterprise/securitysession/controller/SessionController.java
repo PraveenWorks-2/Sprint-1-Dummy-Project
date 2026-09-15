@@ -2,6 +2,7 @@ package com.oneenterprise.securitysession.controller;
 
 import com.oneenterprise.securitysession.dto.SessionRequest;
 import com.oneenterprise.securitysession.dto.SessionResponse;
+import com.oneenterprise.securitysession.dto.SessionValidationResponse;
 import com.oneenterprise.securitysession.service.SessionService;
 
 import jakarta.validation.Valid;
@@ -55,5 +56,13 @@ public class SessionController {
         service.terminateSession(id);
 
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/token/{token}/validate")
+    public ResponseEntity<SessionValidationResponse> validateSession(
+            @PathVariable String token) {
+
+        return ResponseEntity.ok(
+                service.validateSession(token)
+        );
     }
 }

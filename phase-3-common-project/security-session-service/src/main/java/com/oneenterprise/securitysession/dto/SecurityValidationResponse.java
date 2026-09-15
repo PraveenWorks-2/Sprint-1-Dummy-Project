@@ -13,4 +13,7 @@ public class SecurityValidationResponse {
     private long activeDevices;
     private long failedLogins;
     private String message;
+    private boolean accountLocked;
+    private int failedAttempts;
+    private boolean mfaEnabled;
 }

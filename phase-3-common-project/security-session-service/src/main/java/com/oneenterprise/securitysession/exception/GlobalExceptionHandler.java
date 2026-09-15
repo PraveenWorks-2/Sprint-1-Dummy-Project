@@ -20,6 +20,16 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
     }
+    
+    @ExceptionHandler(SecurityValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleSecurityValidation(
+            SecurityValidationException ex) {
+
+        return buildResponse(
+                HttpStatus.FORBIDDEN,
+                ex.getMessage()
+        );
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(
